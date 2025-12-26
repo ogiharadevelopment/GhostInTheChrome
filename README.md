@@ -24,8 +24,8 @@ Ghost In The Chrome is a Chrome extension that displays a transparent interface 
 
 1. Clone this repository
 ```bash
-git clone https://github.com/your-username/ghost-in-the-chrome.git
-cd ghost-in-the-chrome
+git clone https://github.com/ogiharadevelopment/GhostInTheChrome.git
+cd GhostInTheChrome
 ```
 
 2. Load extension in Chrome
@@ -98,8 +98,8 @@ cd ghost-in-the-chrome
 
 1. Clone repository
 ```bash
-git clone https://github.com/your-username/ghost-in-the-chrome.git
-cd ghost-in-the-chrome
+git clone https://github.com/ogiharadevelopment/GhostInTheChrome.git
+cd GhostInTheChrome
 ```
 
 2. Optional: enable debug logging in `content/content.js` if necessary
@@ -171,7 +171,7 @@ This project is open source under the MIT license.
 
 ## Contributing
 
-Bug reports and feature requests are welcome at [Issues](https://github.com/your-username/ghost-in-the-chrome/issues).
+Bug reports and feature requests are welcome at [Issues](https://github.com/ogiharadevelopment/GhostInTheChrome/issues).
 
 Pull requests are also welcome.
 
@@ -187,7 +187,7 @@ Pull requests are also welcome.
 
 ## Contact
 
-- **GitHub Issues**: [Issues](https://github.com/your-username/ghost-in-the-chrome/issues)
+- **GitHub Issues**: [Issues](https://github.com/ogiharadevelopment/GhostInTheChrome/issues)
 - **Email**: Developer contact (refer to GitHub profile)
 
 ---
