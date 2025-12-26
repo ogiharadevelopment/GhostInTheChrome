@@ -1,0 +1,209 @@
+﻿{
+  "extName": {
+    "message": "Ghost In The Chrome"
+  },
+  "extDesc": {
+    "message": "Nueva herramienta de atajos patentada que llama al historial y marcadores desde 'el lugar perfecto'. También restaura pestañas y las llama en masa."
+  },
+  "actionTitle": {
+    "message": "Abrir Ghost In The Chrome"
+  },
+  "manager_title": {
+    "message": "Administrador de Ghost In The Chrome"
+  },
+  "manager_subtitle": {
+    "message": "Organizar y editar páginas guardadas y colecciones de pestañas"
+  },
+  "manager_support_button": {
+    "message": "Apoyar al creador"
+  },
+  "manager_refresh_button": {
+    "message": "Actualizar"
+  },
+  "manager_export_all_button": {
+    "message": "Exportar todos los datos (JSON)"
+  },
+  "manager_sort_label": {
+    "message": "Ordenar colecciones"
+  },
+  "manager_sort_updated_desc": {
+    "message": "Actualizado (más reciente primero)"
+  },
+  "manager_sort_updated_asc": {
+    "message": "Actualizado (más antiguo primero)"
+  },
+  "manager_sort_name_asc": {
+    "message": "Nombre (A → Z)"
+  },
+  "manager_sort_name_desc": {
+    "message": "Nombre (Z → A)"
+  },
+  "manager_search_label": {
+    "message": "Buscar"
+  },
+  "manager_search_placeholder": {
+    "message": "Buscar por título, URL, nota o tecla"
+  },
+  "manager_tags_label": {
+    "message": "Filtros sugeridos"
+  },
+  "manager_tag_recent": {
+    "message": "Guardado recientemente"
+  },
+  "manager_tag_large": {
+    "message": "Muchas pestañas"
+  },
+  "manager_tag_with_note": {
+    "message": "Con nota"
+  },
+  "manager_section_slots": {
+    "message": "Teclas numéricas (conjuntos de ventanas)"
+  },
+  "manager_section_collections": {
+    "message": "Teclas alfabéticas (colecciones de pestañas)"
+  },
+  "manager_collection_note_placeholder": {
+    "message": "Añadir una nota"
+  },
+  "manager_slot_clear_button": {
+    "message": "Limpiar ranura"
+  },
+  "manager_collection_open_button": {
+    "message": "Restaurar"
+  },
+  "manager_collection_export_button": {
+    "message": "Guardar JSON"
+  },
+  "manager_collection_delete_button": {
+    "message": "Eliminar"
+  },
+  "manager_tab_open": {
+    "message": "Abrir"
+  },
+  "manager_tab_remove": {
+    "message": "Eliminar"
+  },
+  "manager_tab_send": {
+    "message": "Enviar"
+  },
+  "manager_tab_copy": {
+    "message": "Copiar"
+  },
+  "manager_sendcopy_help_title": {
+    "message": "Enviar / Copiar"
+  },
+  "manager_sendcopy_help_body": {
+    "message": "Pasa el ratón sobre Enviar o Copiar, luego presiona una tecla para registrar esta pestaña. Tab alterna modos: [1–9] para ranuras, [a–z] para colecciones. Enviar mueve, Copiar duplica."
+  },
+  "manager_keymode_numeric": {
+    "message": "Modo: 1–9"
+  },
+  "manager_keymode_alpha": {
+    "message": "Modo: a–z"
+  },
+  "manager_hint_press_key": {
+    "message": "Presiona una tecla"
+  },
+  "manager_toast_added": {
+    "message": "Añadido a \"$1\"."
+  },
+  "manager_toast_moved": {
+    "message": "Movido a \"$1\"."
+  },
+  "manager_toast_duplicate": {
+    "message": "Ya existe en \"$1\"."
+  },
+  "manager_toast_error": {
+    "message": "Operación fallida."
+  },
+  "manager_toast_refresh_success": {
+    "message": "Datos más recientes cargados."
+  },
+  "manager_empty_slots": {
+    "message": "Aún no hay páginas guardadas o conjuntos de ventanas."
+  },
+  "manager_slot_no_tabs": {
+    "message": "No hay pestañas en esta ranura."
+  },
+  "manager_slot_no_pages": {
+    "message": "No hay páginas en esta ranura."
+  },
+  "manager_empty_collections": {
+    "message": "Aún no se han guardado colecciones."
+  },
+  "manager_no_collections_match": {
+    "message": "Ninguna colección coincide con los filtros actuales."
+  },
+  "manager_list_no_tabs": {
+    "message": "No hay pestañas disponibles."
+  },
+  "manager_default_window_set_name": {
+    "message": "Conjunto de ventanas $1"
+  },
+  "manager_default_collection_name": {
+    "message": "Colección $1"
+  },
+  "manager_slot_title": {
+    "message": "Tecla $1"
+  },
+  "manager_count_tabs": {
+    "message": "$1 pestaña(s)"
+  },
+  "manager_count_items": {
+    "message": "$1 elemento(s)"
+  },
+  "manager_confirm_clear_collection_slot": {
+    "message": "¿Eliminar $2 pestaña(s) guardadas en la tecla \"$1\"?"
+  },
+  "manager_confirm_clear_slot": {
+    "message": "¿Eliminar $2 elemento(s) guardados en la tecla \"$1\"?"
+  },
+  "manager_toast_slot_collection_cleared": {
+    "message": "Conjunto de ventanas en la tecla \"$1\" limpiado."
+  },
+  "manager_toast_slot_cleared": {
+    "message": "Páginas guardadas en la tecla \"$1\" limpiadas."
+  },
+  "manager_confirm_remove_slot_item": {
+    "message": "¿Eliminar \"$1\" de la tecla \"$2\"?"
+  },
+  "manager_toast_slot_item_removed": {
+    "message": "Página eliminada."
+  },
+  "manager_confirm_remove_collection_item": {
+    "message": "¿Eliminar \"$1\" de la colección \"$2\"?"
+  },
+  "manager_toast_collection_tab_removed": {
+    "message": "Pestaña eliminada."
+  },
+  "manager_confirm_delete_collection": {
+    "message": "¿Eliminar completamente la colección \"$1\"?"
+  },
+  "manager_toast_collection_removed": {
+    "message": "Colección \"$1\" eliminada."
+  },
+  "manager_toast_no_tabs_to_open": {
+    "message": "No hay pestañas para restaurar en esta colección."
+  },
+  "manager_toast_open_failed": {
+    "message": "Error al restaurar pestañas."
+  },
+  "manager_toast_collection_exported": {
+    "message": "Colección \"$1\" exportada."
+  },
+  "manager_toast_export_all_success": {
+    "message": "Todos los datos exportados."
+  },
+  "manager_slot_count_summary": {
+    "message": "$1 tecla(s) / $2 elemento(s)"
+  },
+  "manager_collection_count_summary": {
+    "message": "$1 colección(es) / $2 pestaña(s)"
+  },
+  "manager_timestamp_unknown": {
+    "message": "Actualizado -"
+  },
+  "common_close": {
+    "message": "Cerrar"
+  }
+}

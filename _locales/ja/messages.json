@@ -1,0 +1,209 @@
+﻿{
+  "extName": {
+    "message": "Ghost In The Chrome"
+  },
+  "extDesc": {
+    "message": "履歴とブックマークを「ちょうどいいところから」呼び出す特許取得の新型ショートカットツール。タブの復元や一括呼び出しも。"
+  },
+  "actionTitle": {
+    "message": "Ghost In The Chrome を開く"
+  },
+  "manager_title": {
+    "message": "Ghost In The Chrome 管理画面"
+  },
+  "manager_subtitle": {
+    "message": "保存されたページとタブコレクションを整理・編集"
+  },
+  "manager_support_button": {
+    "message": "開発者をサポート"
+  },
+  "manager_refresh_button": {
+    "message": "更新"
+  },
+  "manager_export_all_button": {
+    "message": "すべてのデータをエクスポート (JSON)"
+  },
+  "manager_sort_label": {
+    "message": "コレクションを並び替え"
+  },
+  "manager_sort_updated_desc": {
+    "message": "更新日時（新しい順）"
+  },
+  "manager_sort_updated_asc": {
+    "message": "更新日時（古い順）"
+  },
+  "manager_sort_name_asc": {
+    "message": "名前（あ→ん）"
+  },
+  "manager_sort_name_desc": {
+    "message": "名前（ん→あ）"
+  },
+  "manager_search_label": {
+    "message": "検索"
+  },
+  "manager_search_placeholder": {
+    "message": "タイトル、URL、メモ、またはキーで検索"
+  },
+  "manager_tags_label": {
+    "message": "おすすめフィルター"
+  },
+  "manager_tag_recent": {
+    "message": "最近保存したもの"
+  },
+  "manager_tag_large": {
+    "message": "タブが多いもの"
+  },
+  "manager_tag_with_note": {
+    "message": "メモ付き"
+  },
+  "manager_section_slots": {
+    "message": "数字キー（ウィンドウセット）"
+  },
+  "manager_section_collections": {
+    "message": "アルファベットキー（タブコレクション）"
+  },
+  "manager_collection_note_placeholder": {
+    "message": "メモを追加"
+  },
+  "manager_slot_clear_button": {
+    "message": "スロットをクリア"
+  },
+  "manager_collection_open_button": {
+    "message": "復元"
+  },
+  "manager_collection_export_button": {
+    "message": "JSONで保存"
+  },
+  "manager_collection_delete_button": {
+    "message": "削除"
+  },
+  "manager_tab_open": {
+    "message": "開く"
+  },
+  "manager_tab_remove": {
+    "message": "削除"
+  },
+  "manager_tab_send": {
+    "message": "送信"
+  },
+  "manager_tab_copy": {
+    "message": "コピー"
+  },
+  "manager_sendcopy_help_title": {
+    "message": "送信 / コピー"
+  },
+  "manager_sendcopy_help_body": {
+    "message": "送信またはコピーにマウスオーバーしてからキーを押すと、このタブを登録できます。Tabキーでモードを切り替え: [1–9] はスロット、[a–z] はコレクション。送信は移動、コピーは複製です。"
+  },
+  "manager_keymode_numeric": {
+    "message": "モード: 1–9"
+  },
+  "manager_keymode_alpha": {
+    "message": "モード: a–z"
+  },
+  "manager_hint_press_key": {
+    "message": "キーを押してください"
+  },
+  "manager_toast_added": {
+    "message": "\"$1\" に追加しました。"
+  },
+  "manager_toast_moved": {
+    "message": "\"$1\" に移動しました。"
+  },
+  "manager_toast_duplicate": {
+    "message": "\"$1\" に既に存在します。"
+  },
+  "manager_toast_error": {
+    "message": "操作に失敗しました。"
+  },
+  "manager_toast_refresh_success": {
+    "message": "最新のデータを読み込みました。"
+  },
+  "manager_empty_slots": {
+    "message": "保存されたページやウィンドウセットはまだありません。"
+  },
+  "manager_slot_no_tabs": {
+    "message": "このスロットにタブはありません。"
+  },
+  "manager_slot_no_pages": {
+    "message": "このスロットにページはありません。"
+  },
+  "manager_empty_collections": {
+    "message": "コレクションはまだ保存されていません。"
+  },
+  "manager_no_collections_match": {
+    "message": "現在のフィルターに一致するコレクションはありません。"
+  },
+  "manager_list_no_tabs": {
+    "message": "利用可能なタブはありません。"
+  },
+  "manager_default_window_set_name": {
+    "message": "ウィンドウセット $1"
+  },
+  "manager_default_collection_name": {
+    "message": "コレクション $1"
+  },
+  "manager_slot_title": {
+    "message": "キー $1"
+  },
+  "manager_count_tabs": {
+    "message": "$1 タブ"
+  },
+  "manager_count_items": {
+    "message": "$1 項目"
+  },
+  "manager_confirm_clear_collection_slot": {
+    "message": "キー \"$1\" に保存された $2 タブを削除しますか？"
+  },
+  "manager_confirm_clear_slot": {
+    "message": "キー \"$1\" に保存された $2 項目を削除しますか？"
+  },
+  "manager_toast_slot_collection_cleared": {
+    "message": "キー \"$1\" のウィンドウセットをクリアしました。"
+  },
+  "manager_toast_slot_cleared": {
+    "message": "キー \"$1\" の保存されたページをクリアしました。"
+  },
+  "manager_confirm_remove_slot_item": {
+    "message": "キー \"$2\" から \"$1\" を削除しますか？"
+  },
+  "manager_toast_slot_item_removed": {
+    "message": "ページを削除しました。"
+  },
+  "manager_confirm_remove_collection_item": {
+    "message": "コレクション \"$2\" から \"$1\" を削除しますか？"
+  },
+  "manager_toast_collection_tab_removed": {
+    "message": "タブを削除しました。"
+  },
+  "manager_confirm_delete_collection": {
+    "message": "コレクション \"$1\" を完全に削除しますか？"
+  },
+  "manager_toast_collection_removed": {
+    "message": "コレクション \"$1\" を削除しました。"
+  },
+  "manager_toast_no_tabs_to_open": {
+    "message": "このコレクションに復元するタブがありません。"
+  },
+  "manager_toast_open_failed": {
+    "message": "タブの復元に失敗しました。"
+  },
+  "manager_toast_collection_exported": {
+    "message": "コレクション \"$1\" をエクスポートしました。"
+  },
+  "manager_toast_export_all_success": {
+    "message": "すべてのデータをエクスポートしました。"
+  },
+  "manager_slot_count_summary": {
+    "message": "$1 キー / $2 項目"
+  },
+  "manager_collection_count_summary": {
+    "message": "$1 コレクション / $2 タブ"
+  },
+  "manager_timestamp_unknown": {
+    "message": "更新日時 -"
+  },
+  "common_close": {
+    "message": "閉じる"
+  }
+}

@@ -1,0 +1,764 @@
+/* ゴーストインターフェース - 完全に透明でユーザー操作を透過 */
+.ghost-interface {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 25vw; /* ページ幅の4分の1 */
+  height: 20px; /* 高さ20px */
+  background: transparent !important;
+  z-index: 99999 !important; /* 管理画面のz-indexより高く */
+  transition: all 0.3s ease;
+  opacity: 1 !important;
+  outline: none;
+  pointer-events: auto !important;
+}
+
+.ghost-interface:focus-visible {
+  outline: none;
+}
+
+.ghost-interface.left {
+  right: auto;
+  left: 0;
+}
+
+/* ゴーストマーク - ゴーストインターフェースの境界に沿った破線 */
+.ghost-mark {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 25vw; /* ゴーストインターフェースと同じ幅 */
+  height: 20px; /* ゴーストインターフェースと同じ高さ */
+  z-index: 99998 !important; /* ゴーストインターフェースより1つ低く */
+  /* 破線の境界線 - ゴーストインターフェースの上辺と右辺に沿う */
+  border-top: 3px dashed #ff0000 !important;
+  border-right: 3px dashed #ff0000 !important;
+  transition: border-color 0.3s ease, opacity 0.3s ease;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+.ghost-mark.left {
+  right: auto;
+  left: 0;
+  border-top: 3px dashed #ff0000;
+  border-left: 3px dashed #ff0000;
+  border-right: none;
+}
+
+/* ステルス状態: 破線を透明に */
+.ghost-mark.stealth-mode {
+  border-color: transparent;
+}
+
+/* ステルス状態でのホバー: 黄色のみ表示 */
+.ghost-mark.stealth-mode:hover {
+  border-color: #ffff00;
+}
+
+/* 無効状態: 破線を透明に */
+.ghost-mark.disabled-mode {
+  border-color: transparent;
+}
+
+/* 無効状態でのホバー: 透明のまま */
+.ghost-mark.disabled-mode:hover {
+  border-color: transparent;
+}
+
+/* 通常状態でのホバー（最後に定義） */
+.ghost-mark:hover {
+  border-color: #ffff00;
+}
+
+/* 位置表示ポップアップ */
+.position-popup {
+  position: fixed;
+  display: none;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  z-index: 10002;
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translateX(-50%); /* 中央揃え */
+}
+
+/* 簡易モードと詳細モードの初期状態 */
+.position-popup .position-simple {
+  display: block !important;
+}
+
+.position-popup .position-detail {
+  display: none !important;
+}
+
+.position-text {
+  font-weight: bold;
+}
+
+.position-hint {
+  display: block;
+  font-size: 10px;
+  opacity: 0.8;
+  margin-top: 2px;
+  font-weight: normal;
+}
+
+/* 簡易モードの追加スタイル */
+.position-popup:not(.detail-mode) {
+  white-space: normal;
+  min-width: 400px;
+  max-width: 500px;
+  padding: 8px 12px;
+}
+
+.simple-scroll-section,
+.simple-key-section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.simple-key-title {
+  font-size: 10px;
+  font-weight: bold;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.simple-item {
+  font-size: 10px;
+  opacity: 0.85;
+  margin-top: 4px;
+  line-height: 1.4;
+  padding-left: 8px;
+  position: relative;
+  white-space: nowrap;
+  display: block;
+}
+
+.simple-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  opacity: 0.7;
+}
+
+/* 詳細モード */
+.position-popup.detail-mode {
+  width: 500px;
+  max-width: 90vw;
+  max-height: 85vh;
+  white-space: normal;
+  padding: 16px;
+  pointer-events: auto; /* マウス操作を可能にする */
+}
+
+.position-popup.detail-mode .position-simple {
+  display: none !important;
+}
+
+.position-popup.detail-mode .position-detail {
+  display: block !important;
+}
+
+.position-popup:not(.detail-mode) .position-simple {
+  display: block !important;
+}
+
+.position-popup:not(.detail-mode) .position-detail {
+  display: none !important;
+}
+
+.position-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.position-detail-title {
+  font-size: 11px;
+  opacity: 0.9;
+  margin-left: 8px;
+}
+
+.position-content {
+  max-height: calc(85vh - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: 11px;
+  line-height: 1.6;
+  padding-right: 4px; /* スクロールバーのための余白 */
+}
+
+.detail-section {
+  margin-bottom: 10px;
+}
+
+.detail-item {
+  margin-bottom: 6px;
+  padding-left: 8px;
+  position: relative;
+}
+
+.detail-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  opacity: 0.7;
+}
+
+/* Gスクロールビュー - ホイールスクロール時に表示される履歴・ブックマーク表示 */
+.g-scroll-view {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 500px;
+  height: 600px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 40px);
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10001;
+  font-family: Arial, sans-serif;
+  display: none;
+  overflow: hidden;
+  pointer-events: auto; /* 確実にイベントを受け取る */
+  color: #000000 !important;
+  --ghost-scroll-foreground: #000000;
+  --ghost-scroll-muted: #374151;
+}
+
+.g-scroll-view.left {
+  right: auto;
+  left: 20px;
+}
+
+/* Gスクロールビューのヘッダー */
+.g-scroll-header {
+  background: #f3f4f6;
+  padding: 10px 15px;
+  border-bottom: 1px solid #d1d5db;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: #000000;
+}
+
+.g-scroll-title {
+  flex: 1;
+  display: block;
+  padding-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 閉じるボタン */
+.g-scroll-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #374151;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.3s, color 0.3s;
+  order: 3; /* 右端に配置 */
+}
+
+.g-scroll-close:hover {
+  background-color: #e5e7eb;
+  color: #000000;
+}
+
+
+
+.g-scroll-content {
+  padding: 12px;
+  height: calc(100% - 50px); /* ヘッダーの高さを除く */
+  overflow-y: auto; /* スクロール機能を追加 */
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  color: var(--ghost-scroll-foreground);
+}
+
+.history-item {
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  color: var(--ghost-scroll-foreground);
+}
+
+.history-item:hover {
+  background-color: #f3f4f6;
+}
+
+.history-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.history-favicon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.history-title {
+  font-weight: bold;
+  font-size: 13px;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  text-align: left;
+}
+
+.bookmark-item {
+  padding: 4px 8px !important;
+  border-bottom: 1px solid #eee !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease;
+  min-height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.bookmark-item:hover {
+  background-color: #f3f4f6;
+}
+
+.bookmark-content {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: #000000 !important;
+  box-sizing: border-box !important;
+}
+
+.bookmark-favicon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.favorite-button {
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  padding: 0 !important;
+  min-width: 20px !important;
+}
+
+.bookmark-title {
+  font-weight: bold !important;
+  font-size: 13px !important;
+  color: #000000 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  flex: 1 1 0% !important;
+  flex-shrink: 1 !important;
+  flex-grow: 1 !important;
+  min-width: 100px !important;
+  width: auto !important;
+  max-width: none !important;
+  text-align: left !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  line-height: 1.4 !important;
+  box-sizing: border-box !important;
+}
+
+/* より詳細度の高いセレクタで確実に表示 */
+.g-scroll-view .bookmark-item .bookmark-content .bookmark-title {
+  color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: bold !important;
+  text-align: left !important;
+  line-height: 1.4 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  flex: 1 1 0% !important;
+  flex-shrink: 1 !important;
+  flex-grow: 1 !important;
+  min-width: 50px !important; /* 最小値（動的に上書きされる） */
+  width: auto !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+.g-scroll-view .bookmark-item .bookmark-content .favorite-button {
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+}
+
+/* 親要素も確実に表示 */
+.g-scroll-view .bookmark-item {
+  color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+}
+
+.g-scroll-view .bookmark-content {
+  color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: flex !important;
+}
+
+.recently-closed-item {
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  color: var(--ghost-scroll-foreground);
+}
+
+.recently-closed-item:hover {
+  background-color: #f3f4f6;
+}
+
+.recently-closed-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.recently-closed-favicon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.recently-closed-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.recently-closed-title {
+  font-weight: bold;
+  font-size: 13px;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.recently-closed-time {
+  font-size: 11px;
+  color: var(--ghost-scroll-muted);
+  text-align: left;
+}
+
+/* お気に入りアイテムのスタイル追加 */
+.favorite-item {
+  padding: 4px 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  color: var(--ghost-scroll-foreground);
+}
+
+.favorite-item:hover {
+  background-color: #f3f4f6;
+}
+
+.favorite-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.favorite-favicon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.favorite-title {
+  font-weight: bold;
+  font-size: 13px;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  text-align: left;
+}
+
+
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .ghost-interface {
+    width: 30vw; /* モバイルでは少し広く */
+  }
+  
+  .ghost-mark {
+    width: 30vw;
+  }
+  
+  .g-scroll-view {
+    width: 280px;
+    height: 300px;
+  }
+}
+
+/* キーリスト用のスタイル */
+.keylist-item {
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.keylist-item:hover {
+  background-color: #f3f4f6;
+}
+
+.keylist-content {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.keylist-favicon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.keylist-title {
+  flex: 1;
+  font-size: 14px;
+  color: #000000;
+  font-weight: 500;
+}
+
+.remove-keylist-button:hover {
+  background-color: #ffebee !important;
+  border-radius: 50%;
+} 
+
+/* コレクション表示用スタイル */
+.collection-detail {
+  display: none;
+  padding: 4px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.collection-metadata {
+  padding: 8px 6px 10px 6px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 6px;
+}
+
+.collection-meta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.collection-meta-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.collection-meta-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.collection-meta-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: #374151;
+}
+
+.collection-meta-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.collection-meta-actions button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #1f2937;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.collection-meta-actions button:hover {
+  background: #e0f2fe;
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+
+.collection-meta-note {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #1f2937;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.collection-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.collection-item {
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #ffffff;
+  transition: box-shadow 0.2s ease;
+  color: #000000;
+}
+
+.collection-item:hover {
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+}
+
+.collection-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.collection-favicon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.collection-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.collection-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.collection-url {
+  font-size: 12px;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.collection-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.collection-actions button {
+  padding: 2px 6px;
+  font-size: 11px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #f9fafb;
+  color: #1f2937;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  font-weight: 500;
+}
+
+.collection-actions button:hover {
+  background: #e0f2fe;
+  border-color: #3b82f6;
+  color: #1e40af;
+}
+
+.collection-actions .collection-remove {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+  font-weight: 600;
+}
+
+.collection-actions .collection-remove:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #7f1d1d;
+}
+
+/* 汎用通知 */
+.ghost-notification {
+  pointer-events: none;
+} 

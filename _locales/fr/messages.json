@@ -1,0 +1,209 @@
+﻿{
+  "extName": {
+    "message": "Ghost In The Chrome"
+  },
+  "extDesc": {
+    "message": "Outil de raccourci breveté qui appelle l'historique et les favoris depuis 'l'endroit idéal'. Restaure aussi les onglets et les appelle en masse."
+  },
+  "actionTitle": {
+    "message": "Ouvrir Ghost In The Chrome"
+  },
+  "manager_title": {
+    "message": "Gestionnaire Ghost In The Chrome"
+  },
+  "manager_subtitle": {
+    "message": "Organiser et modifier les pages enregistrées et les collections d'onglets"
+  },
+  "manager_support_button": {
+    "message": "Soutenir le créateur"
+  },
+  "manager_refresh_button": {
+    "message": "Actualiser"
+  },
+  "manager_export_all_button": {
+    "message": "Exporter toutes les données (JSON)"
+  },
+  "manager_sort_label": {
+    "message": "Trier les collections"
+  },
+  "manager_sort_updated_desc": {
+    "message": "Mis à jour (plus récent en premier)"
+  },
+  "manager_sort_updated_asc": {
+    "message": "Mis à jour (plus ancien en premier)"
+  },
+  "manager_sort_name_asc": {
+    "message": "Nom (A → Z)"
+  },
+  "manager_sort_name_desc": {
+    "message": "Nom (Z → A)"
+  },
+  "manager_search_label": {
+    "message": "Rechercher"
+  },
+  "manager_search_placeholder": {
+    "message": "Rechercher par titre, URL, note ou touche"
+  },
+  "manager_tags_label": {
+    "message": "Filtres suggérés"
+  },
+  "manager_tag_recent": {
+    "message": "Récemment enregistré"
+  },
+  "manager_tag_large": {
+    "message": "Beaucoup d'onglets"
+  },
+  "manager_tag_with_note": {
+    "message": "Avec note"
+  },
+  "manager_section_slots": {
+    "message": "Touches numériques (ensembles de fenêtres)"
+  },
+  "manager_section_collections": {
+    "message": "Touches alphabétiques (collections d'onglets)"
+  },
+  "manager_collection_note_placeholder": {
+    "message": "Ajouter une note"
+  },
+  "manager_slot_clear_button": {
+    "message": "Effacer l'emplacement"
+  },
+  "manager_collection_open_button": {
+    "message": "Restaurer"
+  },
+  "manager_collection_export_button": {
+    "message": "Enregistrer JSON"
+  },
+  "manager_collection_delete_button": {
+    "message": "Supprimer"
+  },
+  "manager_tab_open": {
+    "message": "Ouvrir"
+  },
+  "manager_tab_remove": {
+    "message": "Retirer"
+  },
+  "manager_tab_send": {
+    "message": "Envoyer"
+  },
+  "manager_tab_copy": {
+    "message": "Copier"
+  },
+  "manager_sendcopy_help_title": {
+    "message": "Envoyer / Copier"
+  },
+  "manager_sendcopy_help_body": {
+    "message": "Survolez Envoyer ou Copier, puis appuyez sur une touche pour enregistrer cet onglet. Tab bascule entre les modes : [1–9] pour les emplacements, [a–z] pour les collections. Envoyer déplace, Copier duplique."
+  },
+  "manager_keymode_numeric": {
+    "message": "Mode : 1–9"
+  },
+  "manager_keymode_alpha": {
+    "message": "Mode : a–z"
+  },
+  "manager_hint_press_key": {
+    "message": "Appuyez sur une touche"
+  },
+  "manager_toast_added": {
+    "message": "Ajouté à \"$1\"."
+  },
+  "manager_toast_moved": {
+    "message": "Déplacé vers \"$1\"."
+  },
+  "manager_toast_duplicate": {
+    "message": "Existe déjà dans \"$1\"."
+  },
+  "manager_toast_error": {
+    "message": "Opération échouée."
+  },
+  "manager_toast_refresh_success": {
+    "message": "Données les plus récentes chargées."
+  },
+  "manager_empty_slots": {
+    "message": "Aucune page enregistrée ou ensemble de fenêtres pour le moment."
+  },
+  "manager_slot_no_tabs": {
+    "message": "Aucun onglet dans cet emplacement."
+  },
+  "manager_slot_no_pages": {
+    "message": "Aucune page dans cet emplacement."
+  },
+  "manager_empty_collections": {
+    "message": "Aucune collection enregistrée pour le moment."
+  },
+  "manager_no_collections_match": {
+    "message": "Aucune collection ne correspond aux filtres actuels."
+  },
+  "manager_list_no_tabs": {
+    "message": "Aucun onglet disponible."
+  },
+  "manager_default_window_set_name": {
+    "message": "Ensemble de fenêtres $1"
+  },
+  "manager_default_collection_name": {
+    "message": "Collection $1"
+  },
+  "manager_slot_title": {
+    "message": "Touche $1"
+  },
+  "manager_count_tabs": {
+    "message": "$1 onglet(s)"
+  },
+  "manager_count_items": {
+    "message": "$1 élément(s)"
+  },
+  "manager_confirm_clear_collection_slot": {
+    "message": "Supprimer $2 onglet(s) enregistré(s) sur la touche \"$1\" ?"
+  },
+  "manager_confirm_clear_slot": {
+    "message": "Supprimer $2 élément(s) enregistré(s) sur la touche \"$1\" ?"
+  },
+  "manager_toast_slot_collection_cleared": {
+    "message": "Ensemble de fenêtres sur la touche \"$1\" effacé."
+  },
+  "manager_toast_slot_cleared": {
+    "message": "Pages enregistrées sur la touche \"$1\" effacées."
+  },
+  "manager_confirm_remove_slot_item": {
+    "message": "Supprimer \"$1\" de la touche \"$2\" ?"
+  },
+  "manager_toast_slot_item_removed": {
+    "message": "Page supprimée."
+  },
+  "manager_confirm_remove_collection_item": {
+    "message": "Supprimer \"$1\" de la collection \"$2\" ?"
+  },
+  "manager_toast_collection_tab_removed": {
+    "message": "Onglet supprimé."
+  },
+  "manager_confirm_delete_collection": {
+    "message": "Supprimer complètement la collection \"$1\" ?"
+  },
+  "manager_toast_collection_removed": {
+    "message": "Collection \"$1\" supprimée."
+  },
+  "manager_toast_no_tabs_to_open": {
+    "message": "Aucun onglet à restaurer dans cette collection."
+  },
+  "manager_toast_open_failed": {
+    "message": "Échec de la restauration des onglets."
+  },
+  "manager_toast_collection_exported": {
+    "message": "Collection \"$1\" exportée."
+  },
+  "manager_toast_export_all_success": {
+    "message": "Toutes les données exportées."
+  },
+  "manager_slot_count_summary": {
+    "message": "$1 touche(s) / $2 élément(s)"
+  },
+  "manager_collection_count_summary": {
+    "message": "$1 collection(s) / $2 onglet(s)"
+  },
+  "manager_timestamp_unknown": {
+    "message": "Mis à jour -"
+  },
+  "common_close": {
+    "message": "Fermer"
+  }
+}

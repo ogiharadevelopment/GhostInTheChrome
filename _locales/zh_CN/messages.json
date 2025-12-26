@@ -1,0 +1,209 @@
+﻿{
+  "extName": {
+    "message": "Ghost In The Chrome"
+  },
+  "extDesc": {
+    "message": "从\"恰到好处的位置\"调用历史和书签的专利新型快捷键工具。还支持标签页恢复和批量调用。"
+  },
+  "actionTitle": {
+    "message": "打开 Ghost In The Chrome"
+  },
+  "manager_title": {
+    "message": "Ghost In The Chrome 管理界面"
+  },
+  "manager_subtitle": {
+    "message": "整理和编辑已保存的页面和标签页集合"
+  },
+  "manager_support_button": {
+    "message": "支持开发者"
+  },
+  "manager_refresh_button": {
+    "message": "刷新"
+  },
+  "manager_export_all_button": {
+    "message": "导出所有数据 (JSON)"
+  },
+  "manager_sort_label": {
+    "message": "排序集合"
+  },
+  "manager_sort_updated_desc": {
+    "message": "更新时间（最新优先）"
+  },
+  "manager_sort_updated_asc": {
+    "message": "更新时间（最旧优先）"
+  },
+  "manager_sort_name_asc": {
+    "message": "名称 (A → Z)"
+  },
+  "manager_sort_name_desc": {
+    "message": "名称 (Z → A)"
+  },
+  "manager_search_label": {
+    "message": "搜索"
+  },
+  "manager_search_placeholder": {
+    "message": "按标题、URL、备注或按键搜索"
+  },
+  "manager_tags_label": {
+    "message": "建议的筛选器"
+  },
+  "manager_tag_recent": {
+    "message": "最近保存"
+  },
+  "manager_tag_large": {
+    "message": "标签页较多"
+  },
+  "manager_tag_with_note": {
+    "message": "带备注"
+  },
+  "manager_section_slots": {
+    "message": "数字键（窗口集合）"
+  },
+  "manager_section_collections": {
+    "message": "字母键（标签页集合）"
+  },
+  "manager_collection_note_placeholder": {
+    "message": "添加备注"
+  },
+  "manager_slot_clear_button": {
+    "message": "清空插槽"
+  },
+  "manager_collection_open_button": {
+    "message": "恢复"
+  },
+  "manager_collection_export_button": {
+    "message": "保存 JSON"
+  },
+  "manager_collection_delete_button": {
+    "message": "删除"
+  },
+  "manager_tab_open": {
+    "message": "打开"
+  },
+  "manager_tab_remove": {
+    "message": "移除"
+  },
+  "manager_tab_send": {
+    "message": "发送"
+  },
+  "manager_tab_copy": {
+    "message": "复制"
+  },
+  "manager_sendcopy_help_title": {
+    "message": "发送 / 复制"
+  },
+  "manager_sendcopy_help_body": {
+    "message": "将鼠标悬停在发送或复制上，然后按一个键来注册此标签页。Tab 键切换模式：[1–9] 用于插槽，[a–z] 用于集合。发送移动，复制重复。"
+  },
+  "manager_keymode_numeric": {
+    "message": "模式：1–9"
+  },
+  "manager_keymode_alpha": {
+    "message": "模式：a–z"
+  },
+  "manager_hint_press_key": {
+    "message": "按一个键"
+  },
+  "manager_toast_added": {
+    "message": "已添加到 \"$1\"。"
+  },
+  "manager_toast_moved": {
+    "message": "已移动到 \"$1\"。"
+  },
+  "manager_toast_duplicate": {
+    "message": "在 \"$1\" 中已存在。"
+  },
+  "manager_toast_error": {
+    "message": "操作失败。"
+  },
+  "manager_toast_refresh_success": {
+    "message": "已加载最新数据。"
+  },
+  "manager_empty_slots": {
+    "message": "还没有保存的页面或窗口集合。"
+  },
+  "manager_slot_no_tabs": {
+    "message": "此插槽中没有标签页。"
+  },
+  "manager_slot_no_pages": {
+    "message": "此插槽中没有页面。"
+  },
+  "manager_empty_collections": {
+    "message": "还没有保存的集合。"
+  },
+  "manager_no_collections_match": {
+    "message": "没有集合匹配当前筛选器。"
+  },
+  "manager_list_no_tabs": {
+    "message": "没有可用的标签页。"
+  },
+  "manager_default_window_set_name": {
+    "message": "窗口集合 $1"
+  },
+  "manager_default_collection_name": {
+    "message": "集合 $1"
+  },
+  "manager_slot_title": {
+    "message": "按键 $1"
+  },
+  "manager_count_tabs": {
+    "message": "$1 个标签页"
+  },
+  "manager_count_items": {
+    "message": "$1 个项目"
+  },
+  "manager_confirm_clear_collection_slot": {
+    "message": "删除按键 \"$1\" 上保存的 $2 个标签页？"
+  },
+  "manager_confirm_clear_slot": {
+    "message": "删除按键 \"$1\" 上保存的 $2 个项目？"
+  },
+  "manager_toast_slot_collection_cleared": {
+    "message": "已清空按键 \"$1\" 上的窗口集合。"
+  },
+  "manager_toast_slot_cleared": {
+    "message": "已清空按键 \"$1\" 上保存的页面。"
+  },
+  "manager_confirm_remove_slot_item": {
+    "message": "从按键 \"$2\" 中删除 \"$1\"？"
+  },
+  "manager_toast_slot_item_removed": {
+    "message": "已删除页面。"
+  },
+  "manager_confirm_remove_collection_item": {
+    "message": "从集合 \"$2\" 中删除 \"$1\"？"
+  },
+  "manager_toast_collection_tab_removed": {
+    "message": "已删除标签页。"
+  },
+  "manager_confirm_delete_collection": {
+    "message": "完全删除集合 \"$1\"？"
+  },
+  "manager_toast_collection_removed": {
+    "message": "已删除集合 \"$1\"。"
+  },
+  "manager_toast_no_tabs_to_open": {
+    "message": "此集合中没有要恢复的标签页。"
+  },
+  "manager_toast_open_failed": {
+    "message": "恢复标签页失败。"
+  },
+  "manager_toast_collection_exported": {
+    "message": "已导出集合 \"$1\"。"
+  },
+  "manager_toast_export_all_success": {
+    "message": "已导出所有数据。"
+  },
+  "manager_slot_count_summary": {
+    "message": "$1 个按键 / $2 个项目"
+  },
+  "manager_collection_count_summary": {
+    "message": "$1 个集合 / $2 个标签页"
+  },
+  "manager_timestamp_unknown": {
+    "message": "更新时间 -"
+  },
+  "common_close": {
+    "message": "关闭"
+  }
+}

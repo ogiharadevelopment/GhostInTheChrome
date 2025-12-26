@@ -1,0 +1,209 @@
+﻿{
+  "extName": {
+    "message": "Ghost In The Chrome"
+  },
+  "extDesc": {
+    "message": "A new patented shortcut tool that calls history and bookmarks from 'just the right spot'. Also restores tabs and calls them in bulk."
+  },
+  "actionTitle": {
+    "message": "Open Ghost In The Chrome"
+  },
+  "manager_title": {
+    "message": "Ghost In The Chrome Manager"
+  },
+  "manager_subtitle": {
+    "message": "Organize and edit saved pages and tab collections"
+  },
+  "manager_support_button": {
+    "message": "Support the creator"
+  },
+  "manager_refresh_button": {
+    "message": "Refresh"
+  },
+  "manager_export_all_button": {
+    "message": "Export all data (JSON)"
+  },
+  "manager_sort_label": {
+    "message": "Sort collections"
+  },
+  "manager_sort_updated_desc": {
+    "message": "Updated (newest first)"
+  },
+  "manager_sort_updated_asc": {
+    "message": "Updated (oldest first)"
+  },
+  "manager_sort_name_asc": {
+    "message": "Name (A → Z)"
+  },
+  "manager_sort_name_desc": {
+    "message": "Name (Z → A)"
+  },
+  "manager_search_label": {
+    "message": "Search"
+  },
+  "manager_search_placeholder": {
+    "message": "Search by title, URL, note, or key"
+  },
+  "manager_tags_label": {
+    "message": "Suggested filters"
+  },
+  "manager_tag_recent": {
+    "message": "Recently saved"
+  },
+  "manager_tag_large": {
+    "message": "Many tabs"
+  },
+  "manager_tag_with_note": {
+    "message": "With note"
+  },
+  "manager_section_slots": {
+    "message": "Number keys (window sets)"
+  },
+  "manager_section_collections": {
+    "message": "Alphabet keys (tab collections)"
+  },
+  "manager_collection_note_placeholder": {
+    "message": "Add a note"
+  },
+  "manager_slot_clear_button": {
+    "message": "Clear slot"
+  },
+  "manager_collection_open_button": {
+    "message": "Restore"
+  },
+  "manager_collection_export_button": {
+    "message": "Save JSON"
+  },
+  "manager_collection_delete_button": {
+    "message": "Delete"
+  },
+  "manager_tab_open": {
+    "message": "Open"
+  },
+  "manager_tab_remove": {
+    "message": "Remove"
+  },
+  "manager_tab_send": {
+    "message": "Send"
+  },
+  "manager_tab_copy": {
+    "message": "Copy"
+  },
+  "manager_sendcopy_help_title": {
+    "message": "Send / Copy"
+  },
+  "manager_sendcopy_help_body": {
+    "message": "Hover over Send or Copy, then press a key to register this tab. Tab toggles modes: [1–9] for slots, [a–z] for collections. Send moves, Copy duplicates."
+  },
+  "manager_keymode_numeric": {
+    "message": "Mode: 1–9"
+  },
+  "manager_keymode_alpha": {
+    "message": "Mode: a–z"
+  },
+  "manager_hint_press_key": {
+    "message": "Press a key"
+  },
+  "manager_toast_added": {
+    "message": "Added to \"$1\"."
+  },
+  "manager_toast_moved": {
+    "message": "Moved to \"$1\"."
+  },
+  "manager_toast_duplicate": {
+    "message": "Already exists in \"$1\"."
+  },
+  "manager_toast_error": {
+    "message": "Operation failed."
+  },
+  "manager_toast_refresh_success": {
+    "message": "Latest data loaded."
+  },
+  "manager_empty_slots": {
+    "message": "No saved pages or window sets yet."
+  },
+  "manager_slot_no_tabs": {
+    "message": "No tabs in this slot."
+  },
+  "manager_slot_no_pages": {
+    "message": "No pages in this slot."
+  },
+  "manager_empty_collections": {
+    "message": "No collections saved yet."
+  },
+  "manager_no_collections_match": {
+    "message": "No collections match the current filters."
+  },
+  "manager_list_no_tabs": {
+    "message": "No tabs available."
+  },
+  "manager_default_window_set_name": {
+    "message": "Window set $1"
+  },
+  "manager_default_collection_name": {
+    "message": "Collection $1"
+  },
+  "manager_slot_title": {
+    "message": "Key $1"
+  },
+  "manager_count_tabs": {
+    "message": "$1 tab(s)"
+  },
+  "manager_count_items": {
+    "message": "$1 item(s)"
+  },
+  "manager_confirm_clear_collection_slot": {
+    "message": "Remove $2 tab(s) saved on key \"$1\"?"
+  },
+  "manager_confirm_clear_slot": {
+    "message": "Remove $2 item(s) saved on key \"$1\"?"
+  },
+  "manager_toast_slot_collection_cleared": {
+    "message": "Cleared window set on key \"$1\"."
+  },
+  "manager_toast_slot_cleared": {
+    "message": "Cleared saved pages on key \"$1\"."
+  },
+  "manager_confirm_remove_slot_item": {
+    "message": "Remove \"$1\" from key \"$2\"?"
+  },
+  "manager_toast_slot_item_removed": {
+    "message": "Removed the page."
+  },
+  "manager_confirm_remove_collection_item": {
+    "message": "Remove \"$1\" from collection \"$2\"?"
+  },
+  "manager_toast_collection_tab_removed": {
+    "message": "Removed the tab."
+  },
+  "manager_confirm_delete_collection": {
+    "message": "Delete collection \"$1\" completely?"
+  },
+  "manager_toast_collection_removed": {
+    "message": "Deleted collection \"$1\"."
+  },
+  "manager_toast_no_tabs_to_open": {
+    "message": "No tabs to restore in this collection."
+  },
+  "manager_toast_open_failed": {
+    "message": "Failed to restore tabs."
+  },
+  "manager_toast_collection_exported": {
+    "message": "Exported collection \"$1\"."
+  },
+  "manager_toast_export_all_success": {
+    "message": "Exported all data."
+  },
+  "manager_slot_count_summary": {
+    "message": "$1 key(s) / $2 item(s)"
+  },
+  "manager_collection_count_summary": {
+    "message": "$1 collection(s) / $2 tab(s)"
+  },
+  "manager_timestamp_unknown": {
+    "message": "Updated -"
+  },
+  "common_close": {
+    "message": "Close"
+  }
+}

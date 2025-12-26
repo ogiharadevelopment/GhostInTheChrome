@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="manager-page-title">Ghost In The Chrome Manager</title>
+    <link rel="stylesheet" href="manager.css" />
+  </head>
+  <body>
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <header class="manager-header">
+      <div class="manager-header__title">
+        <h1 id="manager-title"></h1>
+        <p id="manager-subtitle"></p>
+      </div>
+      <div class="manager-header__actions">
+        <a
+          id="support-link"
+          class="ghost-btn ghost-btn--ghost ghost-btn--support"
+          href="https://buymeacoffee.com/ogiharadevelopment"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span id="manager-support-text">Support</span>
+        </a>
+        <button id="refresh-data" class="ghost-btn ghost-btn--ghost">
+          <span id="manager-refresh-text">Refresh</span>
+        </button>
+        <button id="export-all" class="ghost-btn ghost-btn--primary">
+          <span id="manager-export-all-text">Export all data (JSON)</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="manager-main">
+      <section class="control-panel">
+        <div class="control-panel__group">
+          <label for="collection-sort" id="manager-sort-label">Sort collections</label>
+          <select id="collection-sort" name="collection-sort">
+            <option value="updatedDesc" id="manager-sort-option-updated-desc">Updated (newest first)</option>
+            <option value="updatedAsc" id="manager-sort-option-updated-asc">Updated (oldest first)</option>
+            <option value="nameAsc" id="manager-sort-option-name-asc">Name (A → Z)</option>
+            <option value="nameDesc" id="manager-sort-option-name-desc">Name (Z → A)</option>
+          </select>
+        </div>
+
+        <div class="control-panel__group">
+          <label for="search-input" id="manager-search-label">Search</label>
+          <input
+            id="search-input"
+            type="search"
+            placeholder=""
+            id="manager-search-placeholder"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="control-panel__group control-panel__group--tags">
+          <span id="manager-tags-label">Suggested filters</span>
+          <div class="tag-group" role="group" aria-label="Suggested filters">
+            <button
+              type="button"
+              class="ghost-tag"
+              data-filter="recent"
+              aria-pressed="false"
+            >
+              <span id="manager-tag-recent-text">Recently saved</span>
+            </button>
+            <button
+              type="button"
+              class="ghost-tag"
+              data-filter="large"
+              aria-pressed="false"
+            >
+              <span id="manager-tag-large-text">Many tabs</span>
+            </button>
+            <button
+              type="button"
+              class="ghost-tag"
+              data-filter="withNote"
+              aria-pressed="false"
+            >
+              <span id="manager-tag-with-note-text">With note</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="manager-section" aria-labelledby="manager-list-section-title">
+        <div class="section-heading">
+          <div class="section-heading__left">
+            <h2 id="manager-list-section-title"></h2>
+            <div class="list-mode-switch" role="tablist" aria-label="List mode">
+              <button id="mode-slots" class="ghost-tab ghost-tab--active" role="tab" aria-selected="true" aria-controls="slot-list" tabindex="0">1–9</button>
+              <button id="mode-collections" class="ghost-tab" role="tab" aria-selected="false" aria-controls="collection-list" tabindex="-1">a–z</button>
+            </div>
+          </div>
+          <span class="section-heading__meta">
+            <span id="slot-count"></span>
+            <span id="collection-count" style="margin-left:8px;"></span>
+          </span>
+        </div>
+        <div class="list-scroll-view">
+          <div class="card-list" id="slot-list" aria-live="polite"></div>
+          <div class="card-list" id="collection-list" aria-live="polite" hidden></div>
+        </div>
+      </section>
+    </main>
+
+    <template id="slot-card-template">
+      <article class="ghost-card">
+        <div class="ghost-card__header">
+          <div class="ghost-card__title">
+            <span class="ghost-card__key">#1</span>
+            <span class="ghost-card__name">Window set</span>
+          </div>
+          <div class="ghost-card__meta">
+            <span class="ghost-card__count">0 item(s)</span>
+          </div>
+        </div>
+        <div class="ghost-card__body ghost-card__body--list"></div>
+        <div class="ghost-card__footer">
+          <div class="ghost-card__footer-left"></div>
+          <div class="ghost-card__footer-right">
+            <button
+              type="button"
+              class="ghost-btn ghost-btn--danger ghost-btn--small ghost-card__remove"
+            >
+              <span class="manager-slot-clear-text">Clear slot</span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="collection-card-template">
+      <article class="ghost-card">
+        <div class="ghost-card__header">
+          <div class="ghost-card__title">
+            <span class="ghost-card__key">@a</span>
+            <input
+              class="ghost-card__name-input"
+              type="text"
+              value="Collection"
+              aria-label="Collection name"
+            />
+          </div>
+          <div class="ghost-card__meta">
+            <span class="ghost-card__count">0 tab(s)</span>
+            <span class="ghost-card__timestamp">Updated -</span>
+          </div>
+        </div>
+        <div class="ghost-card__body ghost-card__body--list"></div>
+        <div class="ghost-card__note">
+          <textarea
+            class="ghost-card__note-input"
+            placeholder=""
+            class="manager-collection-note-placeholder"
+            aria-label="Collection note"
+          ></textarea>
+        </div>
+        <div class="ghost-card__footer">
+          <div class="ghost-card__footer-left">
+            <button
+              type="button"
+              class="ghost-btn ghost-btn--ghost ghost-btn--small ghost-card__open"
+            >
+              <span class="manager-collection-open-text">Restore</span>
+            </button>
+            <button
+              type="button"
+              class="ghost-btn ghost-btn--ghost ghost-btn--small ghost-card__export"
+            >
+              <span class="manager-collection-export-text">Save JSON</span>
+            </button>
+          </div>
+          <div class="ghost-card__footer-right">
+            <button
+              type="button"
+              class="ghost-btn ghost-btn--danger ghost-btn--small ghost-card__delete"
+            >
+              <span class="manager-collection-delete-text">Delete</span>
+            </button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="tab-item-template">
+      <div class="tab-item">
+        <div class="tab-item__main">
+          <img
+            class="tab-item__favicon"
+            src=""
+            alt=""
+            width="16"
+            height="16"
+            aria-hidden="true"
+          />
+          <div class="tab-item__text">
+            <div class="tab-item__title">Page title</div>
+            <a
+              class="tab-item__url"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://example.com
+            </a>
+          </div>
+        </div>
+        <div class="tab-item__actions">
+          <button
+            type="button"
+            class="ghost-btn ghost-btn--ghost ghost-btn--xs tab-item__open"
+          >
+            <span class="manager-tab-open-text">Open</span>
+          </button>
+          <button
+            type="button"
+            class="ghost-btn ghost-btn--danger ghost-btn--xs tab-item__remove"
+          >
+            <span class="manager-tab-remove-text">Remove</span>
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <script src="manager.js"></script>
+    <!-- ゴーストインターフェース初期化スクリプト -->
+    <script src="ghost-init.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,151 @@
+/* Ghost In The Chrome オプション画面のスタイル */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #2c3e50;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.setting-group {
+  margin-bottom: 25px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  background-color: #fafafa;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
+
+select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+#status {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 600;
+}
+
+#status.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+#status.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.legal-section {
+  margin-top: 30px;
+}
+
+.legal-section h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.legal-content {
+  color: #555;
+  font-size: 13px;
+  line-height: 1.6;
+  background-color: #fdfdfd;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.legal-content h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  font-size: 15px;
+}
+
+.legal-content p {
+  margin: 0 0 10px;
+}
+
+.legal-content ul {
+  margin: 0 0 10px 20px;
+  padding: 0;
+}
+
+.legal-content li {
+  margin-bottom: 6px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 10px;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+} 

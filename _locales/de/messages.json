@@ -1,0 +1,209 @@
+﻿{
+  "extName": {
+    "message": "Ghost In The Chrome"
+  },
+  "extDesc": {
+    "message": "Patentiertes Tastenkürzel-Tool, das Verlauf und Lesezeichen von 'genau der richtigen Stelle' aufruft. Stellt auch Tabs wieder her und ruft sie gebündelt auf."
+  },
+  "actionTitle": {
+    "message": "Ghost In The Chrome öffnen"
+  },
+  "manager_title": {
+    "message": "Ghost In The Chrome Verwaltung"
+  },
+  "manager_subtitle": {
+    "message": "Gespeicherte Seiten und Tab-Sammlungen organisieren und bearbeiten"
+  },
+  "manager_support_button": {
+    "message": "Entwickler unterstützen"
+  },
+  "manager_refresh_button": {
+    "message": "Aktualisieren"
+  },
+  "manager_export_all_button": {
+    "message": "Alle Daten exportieren (JSON)"
+  },
+  "manager_sort_label": {
+    "message": "Sammlungen sortieren"
+  },
+  "manager_sort_updated_desc": {
+    "message": "Aktualisiert (neueste zuerst)"
+  },
+  "manager_sort_updated_asc": {
+    "message": "Aktualisiert (älteste zuerst)"
+  },
+  "manager_sort_name_asc": {
+    "message": "Name (A → Z)"
+  },
+  "manager_sort_name_desc": {
+    "message": "Name (Z → A)"
+  },
+  "manager_search_label": {
+    "message": "Suchen"
+  },
+  "manager_search_placeholder": {
+    "message": "Nach Titel, URL, Notiz oder Taste suchen"
+  },
+  "manager_tags_label": {
+    "message": "Vorgeschlagene Filter"
+  },
+  "manager_tag_recent": {
+    "message": "Kürzlich gespeichert"
+  },
+  "manager_tag_large": {
+    "message": "Viele Tabs"
+  },
+  "manager_tag_with_note": {
+    "message": "Mit Notiz"
+  },
+  "manager_section_slots": {
+    "message": "Zifferntasten (Fenstergruppen)"
+  },
+  "manager_section_collections": {
+    "message": "Buchstabentasten (Tab-Sammlungen)"
+  },
+  "manager_collection_note_placeholder": {
+    "message": "Notiz hinzufügen"
+  },
+  "manager_slot_clear_button": {
+    "message": "Slot leeren"
+  },
+  "manager_collection_open_button": {
+    "message": "Wiederherstellen"
+  },
+  "manager_collection_export_button": {
+    "message": "Als JSON speichern"
+  },
+  "manager_collection_delete_button": {
+    "message": "Löschen"
+  },
+  "manager_tab_open": {
+    "message": "Öffnen"
+  },
+  "manager_tab_remove": {
+    "message": "Entfernen"
+  },
+  "manager_tab_send": {
+    "message": "Senden"
+  },
+  "manager_tab_copy": {
+    "message": "Kopieren"
+  },
+  "manager_sendcopy_help_title": {
+    "message": "Senden / Kopieren"
+  },
+  "manager_sendcopy_help_body": {
+    "message": "Bewegen Sie die Maus über Senden oder Kopieren und drücken Sie dann eine Taste, um diesen Tab zu registrieren. Tab schaltet Modi um: [1–9] für Slots, [a–z] für Sammlungen. Senden verschiebt, Kopieren dupliziert."
+  },
+  "manager_keymode_numeric": {
+    "message": "Modus: 1–9"
+  },
+  "manager_keymode_alpha": {
+    "message": "Modus: a–z"
+  },
+  "manager_hint_press_key": {
+    "message": "Taste drücken"
+  },
+  "manager_toast_added": {
+    "message": "Zu \"$1\" hinzugefügt."
+  },
+  "manager_toast_moved": {
+    "message": "Nach \"$1\" verschoben."
+  },
+  "manager_toast_duplicate": {
+    "message": "Existiert bereits in \"$1\"."
+  },
+  "manager_toast_error": {
+    "message": "Vorgang fehlgeschlagen."
+  },
+  "manager_toast_refresh_success": {
+    "message": "Neueste Daten geladen."
+  },
+  "manager_empty_slots": {
+    "message": "Noch keine gespeicherten Seiten oder Fenstergruppen."
+  },
+  "manager_slot_no_tabs": {
+    "message": "Keine Tabs in diesem Slot."
+  },
+  "manager_slot_no_pages": {
+    "message": "Keine Seiten in diesem Slot."
+  },
+  "manager_empty_collections": {
+    "message": "Noch keine Sammlungen gespeichert."
+  },
+  "manager_no_collections_match": {
+    "message": "Keine Sammlungen entsprechen den aktuellen Filtern."
+  },
+  "manager_list_no_tabs": {
+    "message": "Keine Tabs verfügbar."
+  },
+  "manager_default_window_set_name": {
+    "message": "Fenstergruppe $1"
+  },
+  "manager_default_collection_name": {
+    "message": "Sammlung $1"
+  },
+  "manager_slot_title": {
+    "message": "Taste $1"
+  },
+  "manager_count_tabs": {
+    "message": "$1 Tab(s)"
+  },
+  "manager_count_items": {
+    "message": "$1 Element(e)"
+  },
+  "manager_confirm_clear_collection_slot": {
+    "message": "$2 Tab(s) auf Taste \"$1\" löschen?"
+  },
+  "manager_confirm_clear_slot": {
+    "message": "$2 Element(e) auf Taste \"$1\" löschen?"
+  },
+  "manager_toast_slot_collection_cleared": {
+    "message": "Fenstergruppe auf Taste \"$1\" geleert."
+  },
+  "manager_toast_slot_cleared": {
+    "message": "Gespeicherte Seiten auf Taste \"$1\" geleert."
+  },
+  "manager_confirm_remove_slot_item": {
+    "message": "\"$1\" von Taste \"$2\" entfernen?"
+  },
+  "manager_toast_slot_item_removed": {
+    "message": "Seite entfernt."
+  },
+  "manager_confirm_remove_collection_item": {
+    "message": "\"$1\" aus Sammlung \"$2\" entfernen?"
+  },
+  "manager_toast_collection_tab_removed": {
+    "message": "Tab entfernt."
+  },
+  "manager_confirm_delete_collection": {
+    "message": "Sammlung \"$1\" vollständig löschen?"
+  },
+  "manager_toast_collection_removed": {
+    "message": "Sammlung \"$1\" gelöscht."
+  },
+  "manager_toast_no_tabs_to_open": {
+    "message": "Keine Tabs zum Wiederherstellen in dieser Sammlung."
+  },
+  "manager_toast_open_failed": {
+    "message": "Tabs konnten nicht wiederhergestellt werden."
+  },
+  "manager_toast_collection_exported": {
+    "message": "Sammlung \"$1\" exportiert."
+  },
+  "manager_toast_export_all_success": {
+    "message": "Alle Daten exportiert."
+  },
+  "manager_slot_count_summary": {
+    "message": "$1 Taste(n) / $2 Element(e)"
+  },
+  "manager_collection_count_summary": {
+    "message": "$1 Sammlung(en) / $2 Tab(s)"
+  },
+  "manager_timestamp_unknown": {
+    "message": "Aktualisiert -"
+  },
+  "common_close": {
+    "message": "Schließen"
+  }
+}

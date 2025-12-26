@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title data-message="popupTitle">Ghost In The Chrome</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <h3 data-message="popupTitle">Ghost In The Chrome</h3>
+    <p data-message="popupDescription">ページをスクロールすると履歴とブックマークが表示されます。</p>
+    
+    <div class="status-section">
+      <div class="status-indicator">
+        <span class="status-label">状態:</span>
+        <span id="statusText" class="status-value" data-message="popupStatusDisabled">無効</span>
+      </div>
+    </div>
+    
+    <div class="button-section">
+      <button id="toggleExtension" class="toggle-btn">
+        <span data-message="popupEnable">拡張機能を有効にする</span>
+      </button>
+      <button id="openOptions" class="settings-btn">
+        <span data-message="popupOpenSettings">設定を開く</span>
+      </button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 

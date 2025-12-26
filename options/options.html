@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Ghost In The Chrome - Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <h1 id="options-title"></h1>
+    
+    <div class="setting-group">
+      <label id="options-position-label" for="position"></label>
+      <select id="position">
+        <option value="right"></option>
+        <option value="left"></option>
+      </select>
+    </div>
+    
+    <button id="save"></button>
+    <div id="status"></div>
+    
+    <!-- Terms and privacy section -->
+    <div class="legal-section">
+      <h2 id="legal-section-title"></h2>
+      <div class="legal-content">
+        <div id="legal-text">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html> 
