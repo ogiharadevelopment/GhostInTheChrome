@@ -1,5 +1,7 @@
 # Ghost In The Chrome
 
+**Chrome extension for history and bookmark management with transparent ghost UI**
+
 A Chrome extension that displays scroll history and bookmarks with a transparent GUI
 
 ## Overview
@@ -168,6 +170,12 @@ The extension automatically detects the user's browser language and displays app
 ## License
 
 This project is open source under the MIT license.
+
+## Links
+
+- **Chrome Web Store**: [Install from Chrome Web Store](https://chrome.google.com/webstore/detail/jefkcnkbaiiogdilpmmnnkooniginagd)
+- **Source Code**: [GitHub Repository](https://github.com/ogiharadevelopment/GhostInTheChrome)
+- **Extension ID**: `jefkcnkbaiiogdilpmmnnkooniginagd`
 
 ## Contributing
 
