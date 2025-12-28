@@ -202,93 +202,95 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     }
 
-    const openCollectionInWindow = (windowId) => {
-      const createTabsSequentially = (index) => {
-        if (index >= urls.length) {
-          sendResponse({ success: true });
-          return;
+    // 既に開かれている拡張機能独自のページをチェックして除外
+    const extensionId = chrome.runtime.id;
+    const extensionUrlPrefix = `chrome-extension://${extensionId}/`;
+    
+    chrome.tabs.query({}, (allTabs) => {
+      if (chrome.runtime.lastError) {
+        console.error('[BG] タブ取得エラー:', chrome.runtime.lastError);
+        // エラーが発生しても処理を続行
+        proceedWithRestore(urls);
+        return;
+      }
+
+      // 既に開かれている拡張機能独自のページのURLを取得
+      const openExtensionUrls = new Set();
+      allTabs.forEach((tab) => {
+        if (tab.url && tab.url.startsWith(extensionUrlPrefix)) {
+          openExtensionUrls.add(tab.url);
         }
+      });
 
-        chrome.tabs.create(
-          {
-            windowId,
-            url: urls[index],
-            active: index === 0
-          },
-          () => {
-            if (chrome.runtime.lastError) {
-              console.error('タブ作成エラー:', chrome.runtime.lastError);
-              sendResponse({ success: false, error: chrome.runtime.lastError.message });
-              return;
-            }
-            createTabsSequentially(index + 1);
+      // 復元リストから既に開かれている拡張機能独自のページを除外
+      const filteredUrls = urls.filter((url) => {
+        if (url && url.startsWith(extensionUrlPrefix)) {
+          const isAlreadyOpen = openExtensionUrls.has(url);
+          if (isAlreadyOpen) {
+            console.log('[BG] 拡張機能独自のページは既に開かれているため除外:', url);
           }
-        );
-      };
+          return !isAlreadyOpen;
+        }
+        return true;
+      });
 
-      createTabsSequentially(0);
-    };
+      if (filteredUrls.length === 0) {
+        console.log('[BG] 復元するURLがありません（すべて既に開かれています）');
+        sendResponse({ success: true, skipped: urls.length - filteredUrls.length });
+        return;
+      }
 
-    const startRestore = () => {
-      if (newWindow) {
-        // 新しいウィンドウで開く
-        chrome.windows.create({ url: urls[0], focused: true }, (window) => {
-          if (chrome.runtime.lastError || !window) {
-            console.error('ウィンドウ作成エラー:', chrome.runtime.lastError);
-            sendResponse({ success: false, error: chrome.runtime.lastError?.message || 'Failed to create window' });
-            return;
-          }
+      if (filteredUrls.length < urls.length) {
+        console.log('[BG] 拡張機能独自のページを除外しました:', urls.length - filteredUrls.length, '件');
+      }
 
-          if (urls.length === 1) {
+      proceedWithRestore(filteredUrls);
+    });
+
+    const proceedWithRestore = (urlsToRestore) => {
+      const openCollectionInWindow = (windowId) => {
+        const createTabsSequentially = (index) => {
+          if (index >= urlsToRestore.length) {
             sendResponse({ success: true });
             return;
           }
 
-          const remainingUrls = urls.slice(1);
-          const createRemaining = (index) => {
-            if (index >= remainingUrls.length) {
-              sendResponse({ success: true });
-              return;
-            }
-
-            chrome.tabs.create(
-              {
-                windowId: window.id,
-                url: remainingUrls[index],
-                active: false
-              },
-              () => {
-                if (chrome.runtime.lastError) {
-                  console.error('タブ作成エラー:', chrome.runtime.lastError);
-                  sendResponse({ success: false, error: chrome.runtime.lastError.message });
-                  return;
-                }
-                createRemaining(index + 1);
+          chrome.tabs.create(
+            {
+              windowId,
+              url: urlsToRestore[index],
+              active: index === 0
+            },
+            () => {
+              if (chrome.runtime.lastError) {
+                console.error('タブ作成エラー:', chrome.runtime.lastError);
+                sendResponse({ success: false, error: chrome.runtime.lastError.message });
+                return;
               }
-            );
-          };
+              createTabsSequentially(index + 1);
+            }
+          );
+        };
 
-          createRemaining(0);
-        });
-      } else {
-        // 既存のウィンドウに開く
-        const targetWindowId = requestedWindowId ?? sender.tab?.windowId ?? null;
-        if (typeof targetWindowId === 'number') {
-          openCollectionInWindow(targetWindowId);
-        } else {
-          chrome.windows.create({ url: urls[0], focused: true }, (window) => {
+        createTabsSequentially(0);
+      };
+
+      const startRestore = () => {
+        if (newWindow) {
+          // 新しいウィンドウで開く
+          chrome.windows.create({ url: urlsToRestore[0], focused: true }, (window) => {
             if (chrome.runtime.lastError || !window) {
               console.error('ウィンドウ作成エラー:', chrome.runtime.lastError);
               sendResponse({ success: false, error: chrome.runtime.lastError?.message || 'Failed to create window' });
               return;
             }
 
-            if (urls.length === 1) {
+            if (urlsToRestore.length === 1) {
               sendResponse({ success: true });
               return;
             }
 
-            const remainingUrls = urls.slice(1);
+            const remainingUrls = urlsToRestore.slice(1);
             const createRemaining = (index) => {
               if (index >= remainingUrls.length) {
                 sendResponse({ success: true });
@@ -314,22 +316,67 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
             createRemaining(0);
           });
+        } else {
+          // 既存のウィンドウに開く
+          const targetWindowId = requestedWindowId ?? sender.tab?.windowId ?? null;
+          if (typeof targetWindowId === 'number') {
+            openCollectionInWindow(targetWindowId);
+          } else {
+            chrome.windows.create({ url: urlsToRestore[0], focused: true }, (window) => {
+              if (chrome.runtime.lastError || !window) {
+                console.error('ウィンドウ作成エラー:', chrome.runtime.lastError);
+                sendResponse({ success: false, error: chrome.runtime.lastError?.message || 'Failed to create window' });
+                return;
+              }
+
+              if (urlsToRestore.length === 1) {
+                sendResponse({ success: true });
+                return;
+              }
+
+              const remainingUrls = urlsToRestore.slice(1);
+              const createRemaining = (index) => {
+                if (index >= remainingUrls.length) {
+                  sendResponse({ success: true });
+                  return;
+                }
+
+                chrome.tabs.create(
+                  {
+                    windowId: window.id,
+                    url: remainingUrls[index],
+                    active: false
+                  },
+                  () => {
+                    if (chrome.runtime.lastError) {
+                      console.error('タブ作成エラー:', chrome.runtime.lastError);
+                      sendResponse({ success: false, error: chrome.runtime.lastError.message });
+                      return;
+                    }
+                    createRemaining(index + 1);
+                  }
+                );
+              };
+
+              createRemaining(0);
+            });
+          }
         }
+      };
+
+      if (closeTabIds.length > 0) {
+        chrome.tabs.remove(closeTabIds, () => {
+          if (chrome.runtime.lastError) {
+            console.error('タブクローズエラー:', chrome.runtime.lastError);
+            sendResponse({ success: false, error: chrome.runtime.lastError.message });
+            return;
+          }
+          startRestore();
+        });
+      } else {
+        startRestore();
       }
     };
-
-    if (closeTabIds.length > 0) {
-      chrome.tabs.remove(closeTabIds, () => {
-        if (chrome.runtime.lastError) {
-          console.error('タブクローズエラー:', chrome.runtime.lastError);
-          sendResponse({ success: false, error: chrome.runtime.lastError.message });
-          return;
-        }
-        startRestore();
-      });
-    } else {
-      startRestore();
-    }
 
     return true;
   }
