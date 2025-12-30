@@ -250,11 +250,17 @@
   border-bottom: 1px solid #d1d5db;
   border-radius: 8px 8px 0 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
   font-weight: bold;
   font-size: 14px;
   color: #000000;
+}
+
+.g-scroll-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .g-scroll-title {
@@ -281,7 +287,6 @@
   justify-content: center;
   border-radius: 50%;
   transition: background-color 0.3s, color 0.3s;
-  order: 3; /* 右端に配置 */
 }
 
 .g-scroll-close:hover {
@@ -289,11 +294,71 @@
   color: #000000;
 }
 
+/* フィルタ入力欄（別行に配置） */
+.g-scroll-filter-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #d1d5db;
+}
 
+.g-scroll-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.g-scroll-filter-label {
+  font-size: 12px;
+  color: #374151;
+  min-width: 50px;
+  flex-shrink: 0;
+}
+
+.g-scroll-filter-input {
+  flex: 1;
+  min-width: 120px;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #000000;
+  background: #ffffff;
+}
+
+.g-scroll-filter-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.g-scroll-filter-clear {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.g-scroll-filter-clear:hover {
+  background-color: #e5e7eb;
+  color: #000000;
+}
 
 .g-scroll-content {
   padding: 12px;
-  height: calc(100% - 50px); /* ヘッダーの高さを除く */
+  height: calc(100% - 120px); /* ヘッダーとフィルタ欄の高さを除く */
   overflow-y: auto; /* スクロール機能を追加 */
   overflow-x: hidden;
   overscroll-behavior: contain;

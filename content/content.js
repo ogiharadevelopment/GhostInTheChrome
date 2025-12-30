@@ -674,6 +674,13 @@ class GhostInterface {
     this.favorites = []; // お気に入りリスト
     this.historyLimit = 1000; // 履歴表示数の上限
     
+    // フィルタ関連（タイトルとURLの2つ）
+    this.filterWords = {
+      history: { title: '', url: '' },
+      bookmarks: { title: '', url: '' },
+      recentlyClosed: { title: '', url: '' }
+    };
+    
     // 外側クリックハンドラー
     this.outsideClickHandler = null;
     
@@ -693,6 +700,9 @@ class GhostInterface {
     
     // お気に入り・履歴データを読み込み
     await this.initializeFeatureData();
+    
+    // フィルタワードを読み込み
+    await this.loadFilterWords();
     
     // ゴーストインターフェースを作成
     this.createGhostInterface();
@@ -752,6 +762,138 @@ class GhostInterface {
         resolve(result);
       });
     });
+  }
+  
+  // フィルタワードを読み込む（タイトルとURLの2つ）
+  async loadFilterWords() {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([
+        'filterHistoryTitle', 'filterHistoryUrl',
+        'filterBookmarksTitle', 'filterBookmarksUrl',
+        'filterRecentlyClosedTitle', 'filterRecentlyClosedUrl'
+      ], (result) => {
+        this.filterWords.history = {
+          title: result.filterHistoryTitle || '',
+          url: result.filterHistoryUrl || ''
+        };
+        this.filterWords.bookmarks = {
+          title: result.filterBookmarksTitle || '',
+          url: result.filterBookmarksUrl || ''
+        };
+        this.filterWords.recentlyClosed = {
+          title: result.filterRecentlyClosedTitle || '',
+          url: result.filterRecentlyClosedUrl || ''
+        };
+        resolve(this.filterWords);
+      });
+    });
+  }
+  
+  // フィルタワードを保存する（タイトルとURLの2つ）
+  async saveFilterWords(type, titleFilter, urlFilter) {
+    const keyMap = {
+      'history': { title: 'filterHistoryTitle', url: 'filterHistoryUrl' },
+      'bookmarks': { title: 'filterBookmarksTitle', url: 'filterBookmarksUrl' },
+      'recentlyClosed': { title: 'filterRecentlyClosedTitle', url: 'filterRecentlyClosedUrl' }
+    };
+    const keys = keyMap[type];
+    if (!keys) return Promise.resolve();
+    
+    this.filterWords[type] = { title: titleFilter, url: urlFilter };
+    return new Promise((resolve) => {
+      chrome.storage.sync.set({
+        [keys.title]: titleFilter,
+        [keys.url]: urlFilter
+      }, () => {
+        resolve();
+      });
+    });
+  }
+  
+  // フィルタを適用する（タイトルとURLの2つ）
+  applyFilter(titleFilter, urlFilter) {
+    const type = this.currentDisplayType;
+    if (!type || (type !== 'history' && type !== 'bookmarks' && type !== 'recentlyClosed')) {
+      console.log('[FILTER] applyFilter: 無効なタイプまたはタイプが設定されていません', type);
+      return;
+    }
+    
+    const titleWord = (titleFilter || '').trim();
+    const urlWord = (urlFilter || '').trim();
+    
+    console.log('[FILTER] applyFilter呼び出し:', { type, titleWord, urlWord });
+    
+    // フィルタワードを保存
+    this.saveFilterWords(type, titleWord, urlWord);
+    
+    // 現在表示中のアイテムを取得してフィルタリング
+    const gScrollContent = this.gScrollView?.querySelector('.g-scroll-content');
+    if (!gScrollContent) {
+      console.log('[FILTER] g-scroll-contentが見つかりません');
+      return;
+    }
+    
+    let items = [];
+    if (type === 'history') {
+      items = Array.from(gScrollContent.querySelectorAll('.history-item'));
+    } else if (type === 'bookmarks') {
+      items = Array.from(gScrollContent.querySelectorAll('.bookmark-item'));
+    } else if (type === 'recentlyClosed') {
+      items = Array.from(gScrollContent.querySelectorAll('.recently-closed-item'));
+    }
+    
+    console.log('[FILTER] アイテム数:', items.length, 'type:', type);
+    
+    // フィルタリング
+    let visibleCount = 0;
+    items.forEach((item, index) => {
+      const title = item.querySelector('.history-title, .bookmark-title, .recently-closed-title')?.textContent || '';
+      const url = item.getAttribute('data-url') || '';
+      
+      // デバッグ用（最初の3個のみ）
+      if (index < 3) {
+        console.log(`[FILTER] アイテム[${index}]:`, {
+          title: title.substring(0, 30),
+          url: url.substring(0, 50),
+          titleWord: titleWord,
+          urlWord: urlWord
+        });
+      }
+      
+      const matches = this.matchesFilter(title, url, titleWord, urlWord);
+      if (matches) {
+        // 表示する場合は、displayをクリア（デフォルトのflexに戻す）
+        item.style.removeProperty('display');
+      } else {
+        // 非表示にする場合は、!importantを使って確実に非表示にする
+        item.style.setProperty('display', 'none', 'important');
+      }
+      if (matches) visibleCount++;
+      
+      // デバッグ用（最初の3個のみ）
+      if (index < 3) {
+        console.log(`[FILTER] アイテム[${index}] マッチ結果:`, matches, {
+          titleMatch: !titleWord || titleWord === '' || title.toLowerCase().includes(titleWord.toLowerCase()),
+          urlMatch: !urlWord || urlWord === '' || url.toLowerCase().includes(urlWord.toLowerCase())
+        });
+      }
+    });
+    
+    console.log('[FILTER] フィルタ適用完了:', { 
+      total: items.length, 
+      visible: visibleCount, 
+      titleWord: titleWord || '(空)',
+      urlWord: urlWord || '(空)'
+    });
+  }
+  
+  // フィルタに一致するかチェック（タイトルとURLを別々にチェック）
+  matchesFilter(title, url, titleFilter, urlFilter) {
+    const titleMatch = !titleFilter || titleFilter === '' || (title || '').toLowerCase().includes(titleFilter.toLowerCase());
+    const urlMatch = !urlFilter || urlFilter === '' || (url || '').toLowerCase().includes(urlFilter.toLowerCase());
+    
+    // 両方のフィルタに一致する必要がある（AND条件）
+    return titleMatch && urlMatch;
   }
 
   // 保存されたゴーストモードを読み込むメソッド
@@ -1003,8 +1145,20 @@ class GhostInterface {
     gScrollView.id = 'g-scroll-view';
     gScrollView.innerHTML = `
       <div class="g-scroll-header">
-        <span class="g-scroll-title">${this.getLocalizedText('bookmarks')}</span>
-        <span class="g-scroll-close" id="g-scroll-close">×</span>
+        <div class="g-scroll-header-top">
+          <span class="g-scroll-title">${this.getLocalizedText('bookmarks')}</span>
+          <span class="g-scroll-close" id="g-scroll-close">×</span>
+        </div>
+        <div class="g-scroll-filter-container" style="display: none;">
+          <div class="g-scroll-filter-row">
+            <label class="g-scroll-filter-label">タイトル:</label>
+            <input type="text" class="g-scroll-filter-input" id="g-scroll-filter-title" placeholder="タイトルでフィルタ..." />
+            <button class="g-scroll-filter-clear" id="g-scroll-filter-title-clear" style="display: none;">×</button>
+            <label class="g-scroll-filter-label">URL:</label>
+            <input type="text" class="g-scroll-filter-input" id="g-scroll-filter-url" placeholder="URLでフィルタ..." />
+            <button class="g-scroll-filter-clear" id="g-scroll-filter-url-clear" style="display: none;">×</button>
+          </div>
+        </div>
       </div>
       <div class="g-scroll-content">
         <div id="history-list" style="display: none;"></div>
@@ -1072,10 +1226,72 @@ class GhostInterface {
       });
     }
     
-
+    // フィルタ入力欄のイベントリスナーを追加（タイトルとURLの2つ）
+    const filterTitleInput = gScrollView.querySelector('#g-scroll-filter-title');
+    const filterUrlInput = gScrollView.querySelector('#g-scroll-filter-url');
+    const filterTitleClear = gScrollView.querySelector('#g-scroll-filter-title-clear');
+    const filterUrlClear = gScrollView.querySelector('#g-scroll-filter-url-clear');
     
-    // ドラッグ可能にする
-    this.makeDraggable(gScrollView);
+    const applyFilters = () => {
+      const titleFilter = filterTitleInput ? filterTitleInput.value.trim() : '';
+      const urlFilter = filterUrlInput ? filterUrlInput.value.trim() : '';
+      this.applyFilter(titleFilter, urlFilter);
+    };
+    
+    if (filterTitleInput) {
+      filterTitleInput.addEventListener('input', () => {
+        applyFilters();
+        if (filterTitleClear) {
+          filterTitleClear.style.display = filterTitleInput.value.trim() ? 'block' : 'none';
+        }
+      });
+      
+      filterTitleInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+        e.stopPropagation();
+      });
+    }
+    
+    if (filterUrlInput) {
+      filterUrlInput.addEventListener('input', () => {
+        applyFilters();
+        if (filterUrlClear) {
+          filterUrlClear.style.display = filterUrlInput.value.trim() ? 'block' : 'none';
+        }
+      });
+      
+      filterUrlInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+        e.stopPropagation();
+      });
+    }
+    
+    if (filterTitleClear) {
+      filterTitleClear.addEventListener('click', () => {
+        if (filterTitleInput) {
+          filterTitleInput.value = '';
+          filterTitleClear.style.display = 'none';
+          applyFilters();
+        }
+      });
+    }
+    
+    if (filterUrlClear) {
+      filterUrlClear.addEventListener('click', () => {
+        if (filterUrlInput) {
+          filterUrlInput.value = '';
+          filterUrlClear.style.display = 'none';
+          applyFilters();
+        }
+      });
+    }
+    
+    // ドラッグ機能は無効化（ユーザー要求により）
+    // this.makeDraggable(gScrollView);
   }
 
 
@@ -2738,6 +2954,7 @@ class GhostInterface {
       // ファビコンのURLを生成
       const faviconUrl = this.getFaviconUrl(item.url);
       
+      div.setAttribute('data-url', item.url);
       div.innerHTML = `
         <div class="history-content">
           <img src="${faviconUrl}" class="history-favicon" alt="favicon" onerror="this.style.display='none'">
@@ -2747,6 +2964,10 @@ class GhostInterface {
       div.addEventListener('click', () => window.open(item.url, '_blank'));
       historyList.appendChild(div);
     });
+    
+    // フィルタを適用
+    const filters = this.filterWords.history || { title: '', url: '' };
+    this.applyFilter(filters.title, filters.url);
     
     // N％位置に応じてスクロール位置を調整
     this.adjustScrollPosition(percent, history.length);
@@ -2830,6 +3051,7 @@ class GhostInterface {
       }
       const div = document.createElement('div');
       div.className = 'bookmark-item';
+      div.setAttribute('data-url', item.url || '');
       
       // ファビコンのURLを生成
       const faviconUrl = this.getFaviconUrl(item.url);
@@ -3058,12 +3280,50 @@ class GhostInterface {
         
         const itemParent = el.closest('.bookmark-item');
         if (itemParent) {
-          itemParent.style.setProperty('color', '#000000', 'important');
-          itemParent.style.setProperty('opacity', '1', 'important');
-          itemParent.style.setProperty('visibility', 'visible', 'important');
-          itemParent.style.setProperty('display', 'flex', 'important');
-          itemParent.style.setProperty('box-sizing', 'border-box', 'important');
+          // フィルタで非表示にされているアイテムはdisplayを設定しない
+          const computedDisplay = window.getComputedStyle(itemParent).display;
+          if (computedDisplay !== 'none') {
+            itemParent.style.setProperty('color', '#000000', 'important');
+            itemParent.style.setProperty('opacity', '1', 'important');
+            itemParent.style.setProperty('visibility', 'visible', 'important');
+            itemParent.style.setProperty('display', 'flex', 'important');
+            itemParent.style.setProperty('box-sizing', 'border-box', 'important');
+          }
         }
+      });
+      
+      // フィルタを適用（DOM要素が確実に存在する時点で）
+      // requestAnimationFrameを使って、DOM要素が完全にレンダリングされた後にフィルタを適用
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // フィルタ入力欄から直接値を取得（保存された値ではなく、現在の入力値を優先）
+          const filterTitleInput = this.gScrollView?.querySelector('#g-scroll-filter-title');
+          const filterUrlInput = this.gScrollView?.querySelector('#g-scroll-filter-url');
+          
+          console.log('[FILTER] displayBookmarks: フィルタ入力欄の存在確認', {
+            filterTitleInput: !!filterTitleInput,
+            filterUrlInput: !!filterUrlInput,
+            gScrollView: !!this.gScrollView
+          });
+          
+          const titleFilter = filterTitleInput ? filterTitleInput.value.trim() : '';
+          const urlFilter = filterUrlInput ? filterUrlInput.value.trim() : '';
+          
+          // 入力欄に値がない場合は、保存された値を使用
+          const savedFilters = this.filterWords.bookmarks || { title: '', url: '' };
+          const finalTitleFilter = titleFilter || savedFilters.title || '';
+          const finalUrlFilter = urlFilter || savedFilters.url || '';
+          
+          console.log('[FILTER] displayBookmarks: フィルタを適用', { 
+            titleFilter: titleFilter || '(空)',
+            urlFilter: urlFilter || '(空)',
+            savedFilters: { title: savedFilters.title || '(空)', url: savedFilters.url || '(空)' },
+            finalTitleFilter: finalTitleFilter || '(空)',
+            finalUrlFilter: finalUrlFilter || '(空)',
+            currentDisplayType: this.currentDisplayType 
+          });
+          this.applyFilter(finalTitleFilter, finalUrlFilter);
+        });
       });
     }, 100);
     
@@ -3139,6 +3399,7 @@ class GhostInterface {
     items.forEach((item) => {
       const div = document.createElement('div');
       div.className = 'recently-closed-item';
+      div.setAttribute('data-url', item.url || '');
 
       const faviconUrl = this.getFaviconUrl(item.url);
       const closedAt = item.closedAt ? this.formatDateTime(item.closedAt) : '';
@@ -3156,6 +3417,10 @@ class GhostInterface {
       div.addEventListener('click', () => window.open(item.url, '_blank'));
       recentlyClosedList.appendChild(div);
     });
+
+    // フィルタを適用
+    const filters = this.filterWords.recentlyClosed || { title: '', url: '' };
+    this.applyFilter(filters.title, filters.url);
 
     this.adjustScrollPosition(percent, items.length);
   }
@@ -3311,6 +3576,35 @@ class GhostInterface {
         titleElement.textContent = this.getLocalizedText(type);
         }
       }
+      
+      // フィルタ入力欄を更新（履歴、ブックマーク、最近閉じたタブのみ表示）
+      const filterContainer = header.querySelector('.g-scroll-filter-container');
+      const filterTitleInput = header.querySelector('#g-scroll-filter-title');
+      const filterUrlInput = header.querySelector('#g-scroll-filter-url');
+      const filterTitleClear = header.querySelector('#g-scroll-filter-title-clear');
+      const filterUrlClear = header.querySelector('#g-scroll-filter-url-clear');
+      
+      if (filterContainer) {
+        if (type === 'history' || type === 'bookmarks' || type === 'recentlyClosed') {
+          filterContainer.style.display = 'block';
+          // 保存されたフィルタワードを設定
+          const savedFilters = this.filterWords[type] || { title: '', url: '' };
+          if (filterTitleInput) {
+            filterTitleInput.value = savedFilters.title || '';
+            if (filterTitleClear) {
+              filterTitleClear.style.display = savedFilters.title ? 'block' : 'none';
+            }
+          }
+          if (filterUrlInput) {
+            filterUrlInput.value = savedFilters.url || '';
+            if (filterUrlClear) {
+              filterUrlClear.style.display = savedFilters.url ? 'block' : 'none';
+            }
+          }
+        } else {
+          filterContainer.style.display = 'none';
+        }
+      }
     }
     
     // コンテンツを非表示にする
@@ -3444,6 +3738,50 @@ class GhostInterface {
         console.log('- recentlyClosedList非表示後:', recentlyClosedList.style.display);
       }
       
+      // フィルタ欄をリセット
+      const filterTitleInput = this.gScrollView?.querySelector('#g-scroll-filter-title');
+      const filterUrlInput = this.gScrollView?.querySelector('#g-scroll-filter-url');
+      const filterTitleClear = this.gScrollView?.querySelector('#g-scroll-filter-title-clear');
+      const filterUrlClear = this.gScrollView?.querySelector('#g-scroll-filter-url-clear');
+      
+      // 現在の表示タイプを取得して、そのタイプのフィルタワードをクリア
+      const currentType = this.currentDisplayType;
+      if (currentType && (currentType === 'history' || currentType === 'bookmarks' || currentType === 'recentlyClosed')) {
+        // 保存されたフィルタワードをクリア
+        this.filterWords[currentType] = { title: '', url: '' };
+        // ストレージからも削除
+        const keyMap = {
+          'history': { title: 'filterHistoryTitle', url: 'filterHistoryUrl' },
+          'bookmarks': { title: 'filterBookmarksTitle', url: 'filterBookmarksUrl' },
+          'recentlyClosed': { title: 'filterRecentlyClosedTitle', url: 'filterRecentlyClosedUrl' }
+        };
+        const keys = keyMap[currentType];
+        if (keys) {
+          chrome.storage.sync.set({
+            [keys.title]: '',
+            [keys.url]: ''
+          }, () => {
+            console.log(`[FILTER] ${currentType}のフィルタワードをストレージからクリアしました`);
+          });
+        }
+      }
+      
+      // フィルタ入力欄の値をクリア
+      if (filterTitleInput) {
+        filterTitleInput.value = '';
+      }
+      if (filterUrlInput) {
+        filterUrlInput.value = '';
+      }
+      if (filterTitleClear) {
+        filterTitleClear.style.display = 'none';
+      }
+      if (filterUrlClear) {
+        filterUrlClear.style.display = 'none';
+      }
+      
+      console.log('[FILTER] フィルタ欄をリセットしました', { currentType, filterWords: this.filterWords });
+      
       // 外側クリックハンドラーを削除
       if (this.outsideClickHandler) {
         console.log('外側クリックハンドラーを削除');
@@ -3451,7 +3789,7 @@ class GhostInterface {
         this.outsideClickHandler = null;
       }
       
-      console.log('✅ Gスクロールビュー非表示完了、currentTypeをリセット');
+      console.log('✅ Gスクロールビュー非表示完了、currentTypeをリセット、フィルタ欄をリセット');
     } else {
       console.log('❌ gScrollViewが存在しません');
     }
