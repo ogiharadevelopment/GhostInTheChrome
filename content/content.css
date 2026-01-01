@@ -10,7 +10,7 @@
   transition: all 0.3s ease;
   opacity: 1 !important;
   outline: none;
-  pointer-events: auto !important;
+  pointer-events: none !important; /* クリックやドラッグを透過 */
 }
 
 .ghost-interface:focus-visible {

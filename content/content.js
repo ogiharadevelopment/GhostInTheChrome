@@ -2111,143 +2111,23 @@ class GhostInterface {
   }
 
   // ゴーストインターフェースのイベントリスナーを追加
+  // 注意: pointer-events: none にしているため、この要素に直接イベントリスナーを追加しても動作しません
+  // ホイールイベントは document レベルで監視し、ゴーストエリア内かどうかを判定してから処理します
+  // マウスイベント（クリック、ドラッグなど）は自動的に背景に透過されます
   addGhostInterfaceEventListeners(element) {
-    // ホイールイベントのみをキャッチして背景に伝達しない
-    element.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      // ホイールイベントの処理は別途行う
-      this.handleWheelEvent(e);
-    });
-
-    // プレスイベントをキャッチして背景にバブリング
-    element.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!this.isPressed && !this.isVisible) {
-        console.log('ゴーストインターフェースでプレス検出');
-        this.isPressed = true;
-        this.hideGhostInterface();
-        
-        // 背景要素にmousedownイベントをバブリング
-        this.bubbleEventToBackground(e, 'mousedown');
-      }
-    });
-
-    // mouseupイベントをキャッチして背景にバブリング
-    element.addEventListener('mouseup', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (this.isPressed) {
-        console.log('ゴーストインターフェースでリリース検出');
-        this.isPressed = false;
-        this.showGhostInterface();
-        
-        // 背景要素にmouseupイベントをバブリング
-        this.bubbleEventToBackground(e, 'mouseup');
-      }
-    });
-
-    // クリックイベントをバブリング
-    element.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('ゴーストインターフェースでクリック検出、バブリング');
-      this.bubbleEventToBackground(e, 'click');
-    });
-
-    // ドラッグイベントをバブリング
-    element.addEventListener('dragstart', (e) => {
-      console.log('ゴーストインターフェースでドラッグ開始検出、バブリング');
-      this.bubbleEventToBackground(e, 'dragstart');
-    });
-
-    element.addEventListener('drag', (e) => {
-      this.bubbleEventToBackground(e, 'drag');
-    });
-
-    element.addEventListener('dragend', (e) => {
-      console.log('ゴーストインターフェースでドラッグ終了検出、バブリング');
-      this.bubbleEventToBackground(e, 'dragend');
-    });
-
-    element.addEventListener('mouseenter', (e) => {
-      // 背景に通す
-    });
-
-    element.addEventListener('mouseleave', (e) => {
-      // 背景に通す
-    });
+    // pointer-events: none にしているため、この要素に直接イベントリスナーを追加しても動作しません
+    // イベントは自動的に背景に透過されます
+    // ホイールイベントは document レベルで監視しています（startWheelTracking メソッド）
   }
 
   // ゴーストマークのイベントリスナーを追加
+  // 注意: pointer-events: none にしているため、この要素に直接イベントリスナーを追加しても動作しません
+  // ホイールイベントは document レベルで監視し、ゴーストエリア内かどうかを判定してから処理します
+  // マウスイベント（クリック、ドラッグなど）は自動的に背景に透過されます
   addGhostMarkEventListeners(element) {
-    // ホイールイベントのみをキャッチして背景に伝達しない
-    element.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      // ホイールイベントの処理は別途行う
-      this.handleWheelEvent(e);
-    });
-
-    // プレスイベントをキャッチして背景にバブリング
-    element.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!this.isPressed && !this.isVisible) {
-        console.log('ゴーストマークでプレス検出');
-        this.isPressed = true;
-        this.hideGhostInterface();
-        
-        // 背景要素にmousedownイベントをバブリング
-        this.bubbleEventToBackground(e, 'mousedown');
-      }
-    });
-
-    // mouseupイベントをキャッチして背景にバブリング
-    element.addEventListener('mouseup', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (this.isPressed) {
-        console.log('ゴーストマークでリリース検出');
-        this.isPressed = false;
-        this.showGhostInterface();
-        
-        // 背景要素にmouseupイベントをバブリング
-        this.bubbleEventToBackground(e, 'mouseup');
-      }
-    });
-
-    // クリックイベントをバブリング
-    element.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('ゴーストマークでクリック検出、バブリング');
-      this.bubbleEventToBackground(e, 'click');
-    });
-
-    // ドラッグイベントをバブリング
-    element.addEventListener('dragstart', (e) => {
-      console.log('ゴーストマークでドラッグ開始検出、バブリング');
-      this.bubbleEventToBackground(e, 'dragstart');
-    });
-
-    element.addEventListener('drag', (e) => {
-      this.bubbleEventToBackground(e, 'drag');
-    });
-
-    element.addEventListener('dragend', (e) => {
-      console.log('ゴーストマークでドラッグ終了検出、バブリング');
-      this.bubbleEventToBackground(e, 'dragend');
-    });
-
-    element.addEventListener('mouseenter', (e) => {
-      // 背景に通す
-    });
-
-    element.addEventListener('mouseleave', (e) => {
-      // 背景に通す
-    });
+    // pointer-events: none にしているため、この要素に直接イベントリスナーを追加しても動作しません
+    // イベントは自動的に背景に透過されます
+    // ホイールイベントは document レベルで監視しています（startWheelTracking メソッド）
   }
 
   updateSizes() {
@@ -2308,9 +2188,9 @@ class GhostInterface {
     // ゴーストインターフェースが非表示の場合は何もしない
     if (this.ghostInterface && this.ghostInterface.style.opacity === '0') return;
     
-    // ゴーストエリア内にいるか、ゴースト要素上にいるかをチェック
-    const isOnGhostElement = e.target === this.ghostInterface || e.target === this.ghostMark;
-    if (!this.isInGhostArea && !isOnGhostElement) return;
+    // ゴーストエリア内にいるかをチェック
+    // pointer-events: none にしているため、e.target がゴーストインターフェースになることはない
+    if (!this.isInGhostArea) return;
     
     const isShiftPressed = e.shiftKey;
     const isDownScroll = e.deltaY > 0;
@@ -2390,14 +2270,8 @@ class GhostInterface {
   }
 
   addWheelListener() {
+    // capture phaseでイベントをキャッチして、早期にpreventDefault()を実行
     document.addEventListener('wheel', (e) => {
-      // ゴーストインターフェースまたはゴーストマーク上でのホイールイベントは個別に処理
-      const isOnGhostElement = e.target === this.ghostInterface || e.target === this.ghostMark;
-      
-      if (isOnGhostElement) {
-        return; // 個別のイベントリスナーで処理済み
-      }
-      
       // Gスクロールビュー上でのホイールイベントを制御
       const isOnGScrollView = this.gScrollView && this.gScrollView.contains(e.target);
       if (isOnGScrollView) {
@@ -2416,6 +2290,8 @@ class GhostInterface {
       }
       
       // ゴーストエリア内でのホイールイベントを処理
+      // pointer-events: none にしているため、e.target がゴーストインターフェースになることはない
+      // そのため、isInGhostArea のみで判定する
       if (!this.isInGhostArea) return;
       
       // 無効状態の場合は何もしない
@@ -2428,11 +2304,12 @@ class GhostInterface {
       if (this.ghostInterface && this.ghostInterface.style.opacity === '0') return;
       
       // ホイールイベントを処理して背景への伝達を遮断
+      // preventDefault()を呼ぶことで、ページのスクロールを防ぐ
       e.preventDefault();
       e.stopPropagation();
       
       this.handleWheelEvent(e);
-    });
+    }, { capture: true, passive: false });
   }
 
   addKeyListener() {
