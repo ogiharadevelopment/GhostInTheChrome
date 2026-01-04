@@ -1,13 +1,51 @@
+:root {
+  --popup-bg: #f8f9fa;
+  --popup-card-bg: #ffffff;
+  --popup-text: #333;
+  --popup-text-muted: #666;
+  --popup-border: #e9ecef;
+  --popup-status-bg: #f8f9fa;
+  --popup-btn-primary: #007bff;
+  --popup-btn-primary-hover: #0056b3;
+  --popup-btn-secondary: #007bff;
+  --popup-btn-secondary-hover: #0056b3;
+  --popup-btn-disabled: #6c757d;
+  --popup-btn-disabled-hover: #5a6268;
+  --popup-status-enabled-bg: #d4edda;
+  --popup-status-enabled-text: #155724;
+  --popup-status-disabled-bg: #f8d7da;
+  --popup-status-disabled-text: #721c24;
+}
+
+[data-theme="dark"] {
+  --popup-bg: #0f172a;
+  --popup-card-bg: #1a1a1a;
+  --popup-text: #e5e7eb;
+  --popup-text-muted: #9ca3af;
+  --popup-border: #374151;
+  --popup-status-bg: #1a1a1a;
+  --popup-btn-primary: #3b82f6;
+  --popup-btn-primary-hover: #2563eb;
+  --popup-btn-secondary: #3b82f6;
+  --popup-btn-secondary-hover: #2563eb;
+  --popup-btn-disabled: #6b7280;
+  --popup-btn-disabled-hover: #4b5563;
+  --popup-status-enabled-bg: #065f46;
+  --popup-status-enabled-text: #d1fae5;
+  --popup-status-disabled-bg: #7f1d1d;
+  --popup-status-disabled-text: #fee2e2;
+}
+
 body {
   width: 320px;
   padding: 16px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  background: #f8f9fa;
+  background: var(--popup-bg);
 }
 
 .popup {
-  background: white;
+  background: var(--popup-card-bg);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -15,14 +53,14 @@ body {
 
 .popup h3 {
   margin: 0 0 12px 0;
-  color: #333;
+  color: var(--popup-text);
   font-size: 18px;
   font-weight: 600;
   padding: 16px 16px 0 16px;
 }
 
 .popup p {
-  color: #666;
+  color: var(--popup-text-muted);
   line-height: 1.5;
   margin: 0 0 16px 0;
   padding: 0 16px;
@@ -30,10 +68,49 @@ body {
 }
 
 .status-section {
-  background: #f8f9fa;
+  background: var(--popup-status-bg);
   padding: 12px 16px;
-  border-top: 1px solid #e9ecef;
-  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid var(--popup-border);
+}
+
+.dark-mode-section {
+  background: var(--popup-status-bg);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--popup-border);
+}
+
+.auto-open-section {
+  background: var(--popup-status-bg);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--popup-border);
+}
+
+.auto-open-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.auto-open-label {
+  font-size: 14px;
+  color: var(--popup-text-muted);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.dark-mode-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dark-mode-label {
+  font-size: 14px;
+  color: var(--popup-text-muted);
+  font-weight: 500;
+  flex-shrink: 0;
 }
 
 .status-indicator {
@@ -44,7 +121,7 @@ body {
 
 .status-label {
   font-size: 14px;
-  color: #666;
+  color: var(--popup-text-muted);
   font-weight: 500;
 }
 
@@ -58,13 +135,13 @@ body {
 }
 
 .status-value.enabled {
-  background: #d4edda;
-  color: #155724;
+  background: var(--popup-status-enabled-bg);
+  color: var(--popup-status-enabled-text);
 }
 
 .status-value.disabled {
-  background: #f8d7da;
-  color: #721c24;
+  background: var(--popup-status-disabled-bg);
+  color: var(--popup-status-disabled-text);
 }
 
 .button-section {
@@ -74,7 +151,7 @@ body {
 .toggle-btn {
   width: 100%;
   padding: 12px;
-  background: #007bff;
+  background: var(--popup-btn-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -86,7 +163,7 @@ body {
 }
 
 .toggle-btn:hover {
-  background: #0056b3;
+  background: var(--popup-btn-primary-hover);
   transform: translateY(-1px);
 }
 
@@ -95,19 +172,19 @@ body {
 }
 
 .toggle-btn.disabled {
-  background: #6c757d;
+  background: var(--popup-btn-disabled);
 }
 
 .toggle-btn.disabled:hover {
-  background: #5a6268;
+  background: var(--popup-btn-disabled-hover);
 }
 
 .settings-btn {
   width: 100%;
   padding: 10px;
   background: transparent;
-  color: #007bff;
-  border: 1px solid #007bff;
+  color: var(--popup-btn-secondary);
+  border: 1px solid var(--popup-btn-secondary);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
@@ -116,11 +193,67 @@ body {
 }
 
 .settings-btn:hover {
-  background: #007bff;
+  background: var(--popup-btn-secondary-hover);
   color: white;
   transform: translateY(-1px);
 }
 
 .settings-btn:active {
   transform: translateY(0);
+}
+
+/* ダークモードトグル */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 54px;
+  height: 28px;
+  background-color: #ccc;
+  border-radius: 28px;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 4px;
+  top: 4px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider {
+  background-color: var(--popup-btn-primary);
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider::before {
+  transform: translateX(26px);
+}
+
+.toggle-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--popup-text);
+  user-select: none;
+  min-width: 30px;
 } 

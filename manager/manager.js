@@ -77,14 +77,129 @@ const MANAGER_I18N_FALLBACK = {
   manager_slot_count_summary: '$1 key(s) / $2 item(s)',
   manager_collection_count_summary: '$1 collection(s) / $2 tab(s)',
   manager_timestamp_unknown: 'Updated -',
-  common_close: 'Close'
+  common_close: 'Close',
+  manager_dark_mode: 'ダークモード',
+  manager_dark_mode_on: 'ON',
+  manager_dark_mode_off: 'OFF',
+  manager_auto_open_on_hover: 'マウスオーバーで自動表示',
+  manager_auto_open_on_hover_on: 'ON',
+  manager_auto_open_on_hover_off: 'OFF'
 };
 
+function applyTheme(isDark) {
+  if (isDark) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
+function updateDarkModeToggle(isDark) {
+  const toggle = document.getElementById('darkModeToggle');
+  const toggleText = document.getElementById('darkModeText');
+  if (toggle) {
+    toggle.checked = isDark;
+  }
+  if (toggleText) {
+    toggleText.textContent = isDark ? t('manager_dark_mode_on') || 'ON' : t('manager_dark_mode_off') || 'OFF';
+  }
+}
+
+async function loadTheme() {
+  try {
+    const result = await storageGet(['darkMode']);
+    const isDark = result.darkMode === true;
+    applyTheme(isDark);
+    updateDarkModeToggle(isDark);
+  } catch (error) {
+    console.error('Failed to load theme:', error);
+  }
+}
+
+async function loadAutoOpenOnHover() {
+  try {
+    const result = await storageGet(['autoOpenOnHover']);
+    const isEnabled = result.autoOpenOnHover === true;
+    updateAutoOpenOnHoverToggle(isEnabled);
+  } catch (error) {
+    console.error('Failed to load autoOpenOnHover:', error);
+  }
+}
+
+function updateAutoOpenOnHoverToggle(isEnabled) {
+  const toggle = document.getElementById('autoOpenOnHoverToggle');
+  const toggleText = document.getElementById('autoOpenOnHoverText');
+  if (toggle) {
+    toggle.checked = isEnabled;
+  }
+  if (toggleText) {
+    toggleText.textContent = isEnabled ? t('manager_auto_open_on_hover_on') || 'ON' : t('manager_auto_open_on_hover_off') || 'OFF';
+  }
+}
+
+async function toggleAutoOpenOnHover() {
+  try {
+    const result = await storageGet(['autoOpenOnHover']);
+    const currentAutoOpen = result.autoOpenOnHover === true;
+    const newAutoOpen = !currentAutoOpen;
+    
+    await storageSet({ autoOpenOnHover: newAutoOpen });
+    updateAutoOpenOnHoverToggle(newAutoOpen);
+  } catch (error) {
+    console.error('Failed to toggle autoOpenOnHover:', error);
+  }
+}
+
+async function toggleDarkMode() {
+  try {
+    const result = await storageGet(['darkMode']);
+    const currentDarkMode = result.darkMode === true;
+    const newDarkMode = !currentDarkMode;
+    
+    await storageSet({ darkMode: newDarkMode });
+    applyTheme(newDarkMode);
+    updateDarkModeToggle(newDarkMode);
+  } catch (error) {
+    console.error('Failed to toggle dark mode:', error);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  await loadTheme();
+  await loadAutoOpenOnHover();
   cacheElements();
   applyStaticTranslations();
   bindEvents();
   await loadData();
+  
+  // ストレージ変更を監視してダークモードを更新
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === 'sync' && changes.darkMode) {
+      const isDark = changes.darkMode.newValue === true;
+      applyTheme(isDark);
+      updateDarkModeToggle(isDark);
+    }
+    if (areaName === 'sync' && changes.autoOpenOnHover) {
+      const isEnabled = changes.autoOpenOnHover.newValue === true;
+      updateAutoOpenOnHoverToggle(isEnabled);
+    }
+  });
+
+  // ダークモードトグルのイベントリスナー
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener('change', () => {
+      toggleDarkMode();
+    });
+  }
+
+  // マウスオーバー自動表示トグルのイベントリスナー
+  const autoOpenOnHoverToggle = document.getElementById('autoOpenOnHoverToggle');
+  if (autoOpenOnHoverToggle) {
+    autoOpenOnHoverToggle.addEventListener('change', () => {
+      toggleAutoOpenOnHover();
+    });
+  }
 });
 
 function t(key, substitutions = []) {
@@ -255,6 +370,12 @@ function applyStaticTranslations() {
 
   const collectionSectionTitle = document.getElementById('manager-collection-section-title');
   if (collectionSectionTitle) collectionSectionTitle.textContent = t('manager_section_collections');
+
+  const darkModeText = document.getElementById('manager-dark-mode-text');
+  if (darkModeText) darkModeText.textContent = t('manager_dark_mode');
+  
+  const autoOpenText = document.getElementById('manager-auto-open-text');
+  if (autoOpenText) autoOpenText.textContent = t('manager_auto_open_on_hover');
 }
 
 function bindEvents() {

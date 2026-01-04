@@ -205,5 +205,74 @@
   },
   "common_close": {
     "message": "閉じる"
+  },
+  "manager_dark_mode": {
+    "message": "ダークモード"
+  },
+  "manager_dark_mode_on": {
+    "message": "ON"
+  },
+  "manager_dark_mode_off": {
+    "message": "OFF"
+  },
+  "manager_auto_open_on_hover": {
+    "message": "マウスオーバーで自動表示"
+  },
+  "manager_auto_open_on_hover_on": {
+    "message": "ON"
+  },
+  "manager_auto_open_on_hover_off": {
+    "message": "OFF"
+  },
+  "options_settings": {
+    "message": "設定"
+  },
+  "options_gui_position": {
+    "message": "GUI位置:"
+  },
+  "options_top_right": {
+    "message": "右上"
+  },
+  "options_top_left": {
+    "message": "左上"
+  },
+  "options_dark_mode": {
+    "message": "ダークモード:"
+  },
+  "options_dark_mode_on": {
+    "message": "オン"
+  },
+  "options_dark_mode_off": {
+    "message": "オフ"
+  },
+  "options_save": {
+    "message": "保存"
+  },
+  "options_settings_saved": {
+    "message": "設定を保存しました。"
+  },
+  "options_legal_load_failed": {
+    "message": "利用規約とプライバシーポリシーの読み込みに失敗しました。"
+  },
+  "terms_privacy": {
+    "message": "利用規約とプライバシーポリシー"
+  },
+  "popupDarkMode": {
+    "message": "ダークモード:"
+  },
+  "popupDarkModeOn": {
+    "message": "オン"
+  },
+  "popupDarkModeOff": {
+    "message": "オフ"
+  },
+  "popupAutoOpenOnHover": {
+    "message": "マウスオーバーで自動表示:"
+  },
+  "popupAutoOpenOnHoverOn": {
+    "message": "オン"
+  },
+  "popupAutoOpenOnHoverOff": {
+    "message": "オフ"
   }
 }

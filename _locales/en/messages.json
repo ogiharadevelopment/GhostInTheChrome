@@ -205,5 +205,74 @@
   },
   "common_close": {
     "message": "Close"
+  },
+  "manager_dark_mode": {
+    "message": "Dark mode"
+  },
+  "manager_dark_mode_on": {
+    "message": "ON"
+  },
+  "manager_dark_mode_off": {
+    "message": "OFF"
+  },
+  "manager_auto_open_on_hover": {
+    "message": "Auto-open on hover"
+  },
+  "manager_auto_open_on_hover_on": {
+    "message": "ON"
+  },
+  "manager_auto_open_on_hover_off": {
+    "message": "OFF"
+  },
+  "options_settings": {
+    "message": "Settings"
+  },
+  "options_gui_position": {
+    "message": "GUI position:"
+  },
+  "options_top_right": {
+    "message": "Top right"
+  },
+  "options_top_left": {
+    "message": "Top left"
+  },
+  "options_dark_mode": {
+    "message": "Dark mode:"
+  },
+  "options_dark_mode_on": {
+    "message": "ON"
+  },
+  "options_dark_mode_off": {
+    "message": "OFF"
+  },
+  "options_save": {
+    "message": "Save"
+  },
+  "options_settings_saved": {
+    "message": "Settings saved."
+  },
+  "options_legal_load_failed": {
+    "message": "Failed to load the terms and privacy policy."
+  },
+  "terms_privacy": {
+    "message": "Terms of Service & Privacy Policy"
+  },
+  "popupDarkMode": {
+    "message": "Dark mode:"
+  },
+  "popupDarkModeOn": {
+    "message": "ON"
+  },
+  "popupDarkModeOff": {
+    "message": "OFF"
+  },
+  "popupAutoOpenOnHover": {
+    "message": "Auto-open on hover:"
+  },
+  "popupAutoOpenOnHoverOn": {
+    "message": "ON"
+  },
+  "popupAutoOpenOnHoverOff": {
+    "message": "OFF"
   }
 }

@@ -622,6 +622,22 @@ const GHOST_I18N_STRINGS = {
     fr: 'a-z : Restaurer la collection d\'onglets enregistrée',
     es: 'a-z: Restaurar colección de pestañas guardadas',
     de: 'a-z: Gespeicherte Tab-Sammlung wiederherstellen'
+  },
+  common_ok: {
+    ja: 'OK',
+    en: 'OK',
+    'zh-CN': '确定',
+    fr: 'OK',
+    es: 'Aceptar',
+    de: 'OK'
+  },
+  common_cancel: {
+    ja: 'キャンセル',
+    en: 'Cancel',
+    'zh-CN': '取消',
+    fr: 'Annuler',
+    es: 'Cancelar',
+    de: 'Abbrechen'
   }
 };
 
@@ -642,6 +658,10 @@ class GhostInterface {
     // 新しい状態変数
     this.isPressed = false; // プレス状態
     this.isPointerOutside = false; // ポインターがページ外に出たかどうか
+    
+    // マウスオーバー自動表示機能
+    this.autoOpenOnHover = false; // マウスオーバーで自動表示するか
+    this.fixedDisplayType = null; // 固定された表示タイプ（autoOpenOnHoverモードで使用）
     
     // エリア三分割システム用の変数
     this.currentArea = null; // 現在のエリア ('left', 'center', 'right')
@@ -693,7 +713,10 @@ class GhostInterface {
     // 設定を読み込み
     const settings = await this.loadSettings();
     this.position = settings.position || 'right';
-    console.log('設定読み込み完了, position:', this.position);
+    const isDark = settings.darkMode === true;
+    this.autoOpenOnHover = settings.autoOpenOnHover === true;
+    this.applyTheme(isDark);
+    console.log('設定読み込み完了, position:', this.position, 'darkMode:', isDark, 'autoOpenOnHover:', this.autoOpenOnHover);
     
     // 保存されたゴーストモードを読み込み
     await this.loadGhostMode();
@@ -758,10 +781,18 @@ class GhostInterface {
 
   async loadSettings() {
     return new Promise((resolve) => {
-      chrome.storage.sync.get(['position'], (result) => {
+      chrome.storage.sync.get(['position', 'darkMode', 'autoOpenOnHover'], (result) => {
         resolve(result);
       });
     });
+  }
+
+  applyTheme(isDark) {
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
   }
   
   // フィルタワードを読み込む（タイトルとURLの2つ）
@@ -1332,6 +1363,9 @@ class GhostInterface {
     
     // エリアに入った/出た判定（詳細モードでポップアップ内にいる場合は出たと判定しない）
     if (isInArea && !this.isInGhostArea) {
+      // updatePositionPopupでcurrentPercentを計算してからenterGhostAreaを呼ぶ
+      // （ゴーストインターフェースの左端0%、右端100%として計算）
+      this.updatePositionPopup(mouseX, rect);
       this.enterGhostArea();
     } else if (!isInArea && !isInPopup && this.isInGhostArea) {
       this.leaveGhostArea();
@@ -1341,6 +1375,73 @@ class GhostInterface {
     if (isInArea && this.ghostMode !== 2) {
       this.updatePositionPopup(mouseX, rect);
       this.updateCurrentArea(mouseX, rect);
+      
+      // マウスオーバー自動表示機能が有効で、スクロールビューが開いている場合
+      if (this.autoOpenOnHover && this.isVisible && this.fixedDisplayType) {
+        // updatePositionPopupで更新されたcurrentPercentを使用してスクロール位置を調整
+        this.adjustScrollViewPosition();
+      }
+    }
+    
+    // マウス位置を更新（adjustScrollViewPositionで使用）
+    this.currentMouseX = mouseX;
+    this.currentMouseY = mouseY;
+  }
+  
+  // スクロールビューの位置をマウス位置に応じて調整
+  adjustScrollViewPosition() {
+    if (!this.gScrollView || !this.isVisible) return;
+    
+    // updatePositionPopupで計算されたcurrentPercentを使用（ゴーストインターフェースの左端0%、右端100%）
+    // ホイールスクロールモードと同じ方法で使用
+    const percent = this.currentPercent;
+    
+    // パーセンテージが変更された場合のみ更新（閾値を小さくしてより敏感に反応）
+    // 前回のスクロール位置と比較（lastScrollPercentを使用）
+    const lastScrollPercent = this.lastScrollPercent || 0;
+    const percentDiff = Math.abs(lastScrollPercent - percent);
+    if (percentDiff > 0.1) {
+      const oldPercent = lastScrollPercent;
+      const items = this.gScrollView.querySelectorAll('.bookmark-item, .history-item, .recently-closed-item, .favorite-item');
+      const gScrollContent = this.gScrollView.querySelector('.g-scroll-content');
+      if (gScrollContent && items.length > 0) {
+        console.log('🎯 [AUTO-OPEN] スクロールビュー位置を調整開始:', {
+          oldPercent: oldPercent.toFixed(1) + '%',
+          newPercent: percent.toFixed(1) + '%',
+          itemsCount: items.length,
+          diff: percentDiff.toFixed(2) + '%',
+          currentPercent: this.currentPercent,
+          scrollContentHeight: gScrollContent.scrollHeight,
+          scrollContentClientHeight: gScrollContent.clientHeight,
+          currentScrollTop: gScrollContent.scrollTop
+        });
+        // ホイールスクロールモードと同じ方法でスクロール位置を更新
+        this.adjustScrollPosition(percent, items.length);
+        // スクロール位置が実際に更新されたか確認（デバッグ用 - 必要に応じてコメントアウト可能）
+        // requestAnimationFrame(() => {
+        //   const actualScrollTop = gScrollContent.scrollTop;
+        //   const maxScrollY = Math.max(0, gScrollContent.scrollHeight - gScrollContent.clientHeight);
+        //   const expectedScrollTop = (percent / 100) * maxScrollY;
+        //   const scrollDiff = Math.abs(actualScrollTop - expectedScrollTop);
+        //   if (scrollDiff > 5) {
+        //     console.log('🎯 [AUTO-OPEN] スクロール位置更新確認:', {
+        //       expected: expectedScrollTop.toFixed(0),
+        //       actual: actualScrollTop.toFixed(0),
+        //       diff: scrollDiff.toFixed(0),
+        //       maxScrollY: maxScrollY.toFixed(0),
+        //       scrollHeight: gScrollContent.scrollHeight.toFixed(0),
+        //       clientHeight: gScrollContent.clientHeight.toFixed(0),
+        //       percent: percent.toFixed(2) + '%',
+        //       isCorrect: false
+        //     });
+        //   }
+        // });
+      } else {
+        console.log('🎯 [AUTO-OPEN] スクロールビュー位置調整スキップ:', {
+          hasGScrollContent: !!gScrollContent,
+          itemsCount: items.length
+        });
+      }
     }
   }
   
@@ -1456,21 +1557,39 @@ class GhostInterface {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    // 左端と右端の位置を計算（transform: translateX(-50%)で中央揃えされているため）
-    const popupLeft = mouseX - estimatedWidth / 2;
-    const popupRight = mouseX + estimatedWidth / 2;
-    
-    // 位置を調整
+    // スクロールビューが表示されている場合は、ポップアップをスクロールビューの左側に配置
     let adjustedLeft = mouseX;
     let adjustedTop = rect.bottom + 5;
     
-    // 右端で見切れる場合
-    if (popupRight > viewportWidth) {
-      adjustedLeft = viewportWidth - estimatedWidth / 2;
-    }
-    // 左端で見切れる場合
-    if (popupLeft < 0) {
-      adjustedLeft = estimatedWidth / 2;
+    if (this.isVisible && this.gScrollView) {
+      const scrollViewRect = this.gScrollView.getBoundingClientRect();
+      // スクロールビューの左側に配置（スクロールビューの左端から少し左に）
+      adjustedLeft = scrollViewRect.left - estimatedWidth / 2 - 10;
+      
+      // 左端で見切れる場合は、スクロールビューの右側に配置
+      if (adjustedLeft < estimatedWidth / 2) {
+        adjustedLeft = scrollViewRect.right + estimatedWidth / 2 + 10;
+        // 右端で見切れる場合は、画面内に収める
+        if (adjustedLeft + estimatedWidth / 2 > viewportWidth) {
+          adjustedLeft = viewportWidth - estimatedWidth / 2;
+        }
+      }
+      
+      // スクロールビューの上端に合わせる
+      adjustedTop = scrollViewRect.top;
+    } else {
+      // スクロールビューが表示されていない場合は従来の位置計算
+      const popupLeft = mouseX - estimatedWidth / 2;
+      const popupRight = mouseX + estimatedWidth / 2;
+      
+      // 右端で見切れる場合
+      if (popupRight > viewportWidth) {
+        adjustedLeft = viewportWidth - estimatedWidth / 2;
+      }
+      // 左端で見切れる場合
+      if (popupLeft < 0) {
+        adjustedLeft = estimatedWidth / 2;
+      }
     }
     
     // 下端で見切れる場合（上に表示）
@@ -1497,27 +1616,46 @@ class GhostInterface {
     const actualHeight = popupRect.height;
     
     // 実際の幅に基づいて再調整
-    const actualPopupLeft = adjustedLeft - actualWidth / 2;
-    const actualPopupRight = adjustedLeft + actualWidth / 2;
-    
     let finalLeft = adjustedLeft;
     let finalTop = adjustedTop;
     
-    // 右端で見切れる場合
-    if (actualPopupRight > viewportWidth) {
-      finalLeft = viewportWidth - actualWidth / 2;
-    }
-    // 左端で見切れる場合
-    if (actualPopupLeft < 0) {
-      finalLeft = actualWidth / 2;
-    }
-    
-    // 下端で見切れる場合（上に表示）
-    if (finalTop + actualHeight > viewportHeight) {
-      finalTop = rect.top - actualHeight - 5;
-      // 上にも表示できない場合は画面内に収める
-      if (finalTop < 0) {
-        finalTop = 5;
+    // スクロールビューが表示されている場合は、既に調整済みなのでそのまま使用
+    if (this.isVisible && this.gScrollView) {
+      const scrollViewRect = this.gScrollView.getBoundingClientRect();
+      const actualPopupLeft = adjustedLeft - actualWidth / 2;
+      
+      // 左端で見切れる場合は、スクロールビューの右側に配置
+      if (actualPopupLeft < 0) {
+        finalLeft = scrollViewRect.right + actualWidth / 2 + 10;
+        // 右端で見切れる場合は、画面内に収める
+        if (finalLeft + actualWidth / 2 > viewportWidth) {
+          finalLeft = viewportWidth - actualWidth / 2;
+        }
+      }
+      
+      // スクロールビューの上端に合わせる
+      finalTop = scrollViewRect.top;
+    } else {
+      // スクロールビューが表示されていない場合は従来の調整
+      const actualPopupLeft = adjustedLeft - actualWidth / 2;
+      const actualPopupRight = adjustedLeft + actualWidth / 2;
+      
+      // 右端で見切れる場合
+      if (actualPopupRight > viewportWidth) {
+        finalLeft = viewportWidth - actualWidth / 2;
+      }
+      // 左端で見切れる場合
+      if (actualPopupLeft < 0) {
+        finalLeft = actualWidth / 2;
+      }
+      
+      // 下端で見切れる場合（上に表示）
+      if (finalTop + actualHeight > viewportHeight) {
+        finalTop = rect.top - actualHeight - 5;
+        // 上にも表示できない場合は画面内に収める
+        if (finalTop < 0) {
+          finalTop = 5;
+        }
       }
     }
     
@@ -1657,6 +1795,35 @@ class GhostInterface {
       this.debugLog('pointer', 'ghost interface focused for key capture');
     }
     
+    // マウスオーバー自動表示機能が有効な場合
+    if (this.autoOpenOnHover) {
+      // currentPercentは既にupdatePositionPopupで計算されている（ゴーストインターフェースの左端0%、右端100%）
+      // そのまま使用する
+      
+      // スクロールビューが開いていない場合のみ開く
+      if (!this.isVisible) {
+        // 固定された表示タイプがない場合（初回）はブックマークを開く
+        if (!this.fixedDisplayType) {
+          console.log('🎯 [AUTO-OPEN] マウスオーバーでブックマークを自動表示, percent:', this.currentPercent.toFixed(1) + '%');
+          this.fixedDisplayType = 'bookmarks';
+          this.showGScrollView(this.currentPercent, 'bookmarks');
+          this.loadHistoryAndBookmarks(this.currentPercent);
+        } else {
+          // 固定された表示タイプがある場合は、そのタイプで開く
+          console.log('🎯 [AUTO-OPEN] マウスオーバーで固定タイプを自動表示:', this.fixedDisplayType, 'percent:', this.currentPercent.toFixed(1) + '%');
+          this.showGScrollView(this.currentPercent, this.fixedDisplayType);
+          if (this.fixedDisplayType === 'bookmarks') {
+            this.loadHistoryAndBookmarks(this.currentPercent);
+          } else if (this.fixedDisplayType === 'history') {
+            this.loadHistory(this.currentPercent);
+          } else if (this.fixedDisplayType === 'recentlyClosed') {
+            this.displayRecentlyClosed(this.currentPercent);
+          }
+        }
+      }
+      // 既に開いている場合は、マウス位置に応じてスクロールビューの位置を調整（checkMousePositionで行う）
+    }
+    
     console.log('ゴーストエリアに入りました');
   }
 
@@ -1683,6 +1850,9 @@ class GhostInterface {
     this.isInGhostArea = false;
     // 現在のモードに応じて色を変更
     this.changeGhostMarkColor(this.ghostMarkColor);
+    
+    // マウスオーバー自動表示機能が有効な場合でも、スクロールビューは開いたままにする
+    // （元々の実装通り、ゴーストエリアから離れてもスクロールビューは閉じない）
     
     // 詳細モードの時は、ポップアップを非表示にしない（ポップアップ内でマウス操作を可能にするため）
     if (!this.isDetailMode) {
@@ -2252,17 +2422,35 @@ class GhostInterface {
       } else if (isUpScroll) {
         // 上ホイールスクロール: 履歴表示
         console.log('上ホイールスクロール検出, currentType:', currentType, '!== history:', currentType !== 'history');
-        if (currentType !== 'history') {
-          console.log('上ホイールスクロール: 履歴表示');
-          this.showGScrollView(this.currentPercent, 'history');
-          this.loadHistory(this.currentPercent);
-        } else {
-          // 同じタイプで新しい位置の場合、スクロール位置を更新
-          if (this.lastScrollPercent !== this.currentPercent || this.lastScrollType !== 'history') {
-            console.log('同じタイプで新しい位置のため、スクロール位置を更新');
-            this.updateScrollPositionForCurrentType('history');
+        
+        // マウスオーバー自動表示機能が有効な場合
+        if (this.autoOpenOnHover && this.fixedDisplayType) {
+          if (this.fixedDisplayType !== 'history') {
+            console.log('🎯 [AUTO-OPEN] 上ホイールスクロール: 履歴に切り替え');
+            this.fixedDisplayType = 'history';
+            this.showGScrollView(this.currentPercent, 'history');
+            this.loadHistory(this.currentPercent);
           } else {
-            console.log('履歴は既に表示されているため、何もしません');
+            // 同じタイプで新しい位置の場合、スクロール位置を更新
+            if (this.lastScrollPercent !== this.currentPercent || this.lastScrollType !== 'history') {
+              console.log('同じタイプで新しい位置のため、スクロール位置を更新');
+              this.updateScrollPositionForCurrentType('history');
+            }
+          }
+        } else {
+          // 従来の動作
+          if (currentType !== 'history') {
+            console.log('上ホイールスクロール: 履歴表示');
+            this.showGScrollView(this.currentPercent, 'history');
+            this.loadHistory(this.currentPercent);
+          } else {
+            // 同じタイプで新しい位置の場合、スクロール位置を更新
+            if (this.lastScrollPercent !== this.currentPercent || this.lastScrollType !== 'history') {
+              console.log('同じタイプで新しい位置のため、スクロール位置を更新');
+              this.updateScrollPositionForCurrentType('history');
+            } else {
+              console.log('履歴は既に表示されているため、何もしません');
+            }
           }
         }
       }
@@ -2419,6 +2607,21 @@ class GhostInterface {
     // @キーは全エリアで処理可能
     if (key === '@') {
       console.log('[GHOST][KEY] @ key (all areas)');
+      
+      // マウスオーバー自動表示機能が有効な場合
+      if (this.autoOpenOnHover && this.fixedDisplayType) {
+        if (this.fixedDisplayType !== 'recentlyClosed') {
+          console.log('🎯 [AUTO-OPEN] @キー: 最近閉じたタブに切り替え');
+          this.fixedDisplayType = 'recentlyClosed';
+          this.displayRecentlyClosed(this.currentPercent);
+          return;
+        } else {
+          // 既に最近閉じたタブが表示されている場合は何もしない
+          return;
+        }
+      }
+      
+      // 従来の動作
       this.displayRecentlyClosed(this.currentPercent);
       return;
     }
@@ -2627,18 +2830,18 @@ class GhostInterface {
   }
 
   // 右エリアのキー処理（一括開封）
-  handleRightAreaKey(key) {
+  async handleRightAreaKey(key) {
     if (this.isDigitKey(key)) {
       console.log('[GHOST][RESTORE] right area digit key', key);
       if (this.collections[key] && this.collections[key].tabs && this.collections[key].tabs.length > 0) {
-        this.confirmAndRestoreCollection(key);
+        await this.confirmAndRestoreCollection(key);
       } else {
-        this.confirmAndOpenPages(key); // レガシーデータ用
+        await this.confirmAndOpenPages(key); // レガシーデータ用
       }
     } else if (this.isLetterKey(key)) {
       const normalizedKey = this.normalizeLetterKey(key);
       console.log('[GHOST][RESTORE] right area letter key', normalizedKey);
-      this.confirmAndRestoreCollection(normalizedKey);
+      await this.confirmAndRestoreCollection(normalizedKey);
     } else {
       console.log('[GHOST][RESTORE] right area unsupported key', key);
       this.showNotification(this.getLocalizedText('notification_unsupported_key'), 'warning');
@@ -2850,8 +3053,15 @@ class GhostInterface {
     this.adjustScrollPosition(percent, history.length);
   }
 
-  displayBookmarks(bookmarks, percent = 0) {
+  async displayBookmarks(bookmarks, percent = 0) {
     console.log('displayBookmarks呼び出し, percent:', percent, 'bookmarks数:', bookmarks.length);
+    
+    // ダークモード状態と色情報をログ出力
+    const isDark = await new Promise((resolve) => {
+      chrome.storage.sync.get(['darkMode'], (result) => {
+        resolve(result.darkMode === true || document.documentElement.getAttribute('data-theme') === 'dark');
+      });
+    });
     // 最初の5個のブックマークのデータをログ出力
     if (bookmarks.length > 0) {
       const sampleData = bookmarks.slice(0, 5).map((item, idx) => ({
@@ -2958,10 +3168,10 @@ class GhostInterface {
         </div>
       `;
       
-      // 親要素にもスタイルを設定
+      // 親要素にもスタイルを設定（色はCSS変数に任せる）
       const contentElement = div.querySelector('.bookmark-content');
       if (contentElement) {
-        contentElement.style.setProperty('color', '#000000', 'important');
+        // colorはCSS変数に任せる（ダークモード対応のため）
         contentElement.style.setProperty('opacity', '1', 'important');
         contentElement.style.setProperty('visibility', 'visible', 'important');
         contentElement.style.setProperty('display', 'flex', 'important');
@@ -2993,8 +3203,7 @@ class GhostInterface {
       // タイトル要素に直接インラインスタイルを設定して、外部CSSの影響を完全に防ぐ
       const titleElement = div.querySelector('.bookmark-title');
       if (titleElement) {
-        // setPropertyの第3引数に'important'を指定
-        titleElement.style.setProperty('color', '#000000', 'important');
+        // colorはCSS変数に任せる（ダークモード対応のため）
         titleElement.style.setProperty('opacity', '1', 'important');
         titleElement.style.setProperty('visibility', 'visible', 'important');
         titleElement.style.setProperty('display', 'block', 'important');
@@ -3018,8 +3227,8 @@ class GhostInterface {
         titleElement.style.setProperty('box-sizing', 'border-box', 'important');
       }
       
-      // bookmark-itemにもスタイルを設定
-      div.style.setProperty('color', '#000000', 'important');
+      // bookmark-itemにもスタイルを設定（色はCSS変数に任せる）
+      // colorはCSS変数に任せる（ダークモード対応のため）
       div.style.setProperty('opacity', '1', 'important');
       div.style.setProperty('visibility', 'visible', 'important');
       div.style.setProperty('display', 'flex', 'important');
@@ -3104,12 +3313,11 @@ class GhostInterface {
         const computed = window.getComputedStyle(el);
         console.log(`  [${i}] textContent: "${el.textContent}", color: ${computed.color}, opacity: ${computed.opacity}, visibility: ${computed.visibility}, display: ${computed.display}`);
         
-        // スタイルが上書きされている場合は再適用
-        if (computed.color === 'rgba(0, 0, 0, 0)' || computed.color === 'transparent' || 
-            computed.opacity === '0' || computed.visibility === 'hidden' || 
+        // スタイルが上書きされている場合は再適用（colorはCSS変数に任せる）
+        if (computed.opacity === '0' || computed.visibility === 'hidden' || 
             computed.display === 'none') {
           console.log(`  [${i}] スタイルが上書きされているため再適用します`);
-          el.style.setProperty('color', '#000000', 'important');
+          // colorはCSS変数に任せる（ダークモード対応のため）
           el.style.setProperty('opacity', '1', 'important');
           el.style.setProperty('visibility', 'visible', 'important');
           el.style.setProperty('display', 'block', 'important');
@@ -3118,7 +3326,7 @@ class GhostInterface {
       
       // すべてのタイトル要素と親要素に対してスタイルを強制的に再適用
       titleElements.forEach((el, idx) => {
-        el.style.setProperty('color', '#000000', 'important');
+        // colorはCSS変数に任せる（ダークモード対応のため）
         el.style.setProperty('opacity', '1', 'important');
         el.style.setProperty('visibility', 'visible', 'important');
         el.style.setProperty('display', 'block', 'important');
@@ -3138,7 +3346,7 @@ class GhostInterface {
         // 親要素も修正
         const contentParent = el.closest('.bookmark-content');
         if (contentParent) {
-          contentParent.style.setProperty('color', '#000000', 'important');
+          // colorはCSS変数に任せる（ダークモード対応のため）
           contentParent.style.setProperty('opacity', '1', 'important');
           contentParent.style.setProperty('visibility', 'visible', 'important');
           contentParent.style.setProperty('display', 'flex', 'important');
@@ -3160,11 +3368,52 @@ class GhostInterface {
           // フィルタで非表示にされているアイテムはdisplayを設定しない
           const computedDisplay = window.getComputedStyle(itemParent).display;
           if (computedDisplay !== 'none') {
-            itemParent.style.setProperty('color', '#000000', 'important');
+            // colorはCSS変数に任せる（ダークモード対応のため）
             itemParent.style.setProperty('opacity', '1', 'important');
             itemParent.style.setProperty('visibility', 'visible', 'important');
             itemParent.style.setProperty('display', 'flex', 'important');
             itemParent.style.setProperty('box-sizing', 'border-box', 'important');
+          }
+        }
+      });
+      
+      // 色情報をログ出力（DOM要素が確実に存在する時点で）
+      requestAnimationFrame(() => {
+        const bookmarkList = document.getElementById('bookmark-list');
+        if (bookmarkList) {
+          const firstBookmark = bookmarkList.querySelector('.bookmark-item');
+          const firstTitle = firstBookmark?.querySelector('.bookmark-title');
+          const firstContent = firstBookmark?.querySelector('.bookmark-content');
+          
+          if (firstBookmark && firstTitle) {
+            const bookmarkStyle = getComputedStyle(firstBookmark);
+            const titleStyle = getComputedStyle(firstTitle);
+            const contentStyle = firstContent ? getComputedStyle(firstContent) : null;
+            const rootStyle = getComputedStyle(document.documentElement);
+            
+            console.log('🎨 [COLOR] displayBookmarks - 実際の色情報:', {
+              isDark: isDark,
+              dataTheme: document.documentElement.getAttribute('data-theme'),
+              cssVariables: {
+                '--ghost-scroll-foreground': rootStyle.getPropertyValue('--ghost-scroll-foreground').trim() || '未設定',
+                '--ghost-scroll-item-text': rootStyle.getPropertyValue('--ghost-scroll-item-text').trim() || '未設定',
+              },
+              actualColors: {
+                bookmarkItem: {
+                  background: bookmarkStyle.backgroundColor,
+                  color: bookmarkStyle.color,
+                },
+                bookmarkContent: {
+                  background: contentStyle?.backgroundColor || 'N/A',
+                  color: contentStyle?.color || 'N/A',
+                },
+                bookmarkTitle: {
+                  color: titleStyle.color,
+                  fontWeight: titleStyle.fontWeight,
+                },
+              },
+              firstBookmarkText: firstTitle.textContent?.substring(0, 30) || 'N/A',
+            });
           }
         }
       });
@@ -3345,23 +3594,16 @@ class GhostInterface {
     // パーセンテージを調整して、端の位置でも適切に表示されるようにする
     let adjustedPercent = percent;
     
-    // 端の位置での調整
-    if (percent <= 2) {
-      // 2%以下の場合は0%として扱い、リストの上端を表示
+    // 端の位置での調整（閾値を小さくして、より細かくスクロールできるようにする）
+    if (percent <= 0.5) {
+      // 0.5%以下の場合は0%として扱い、リストの上端を表示
       adjustedPercent = 0;
-    } else if (percent >= 98) {
-      // 98%以上の場合は100%として扱い、リストの下端を表示
+    } else if (percent >= 99.5) {
+      // 99.5%以上の場合は100%として扱い、リストの下端を表示
       adjustedPercent = 100;
     } else {
-      // 2%〜98%の範囲では、実際のスクロール可能範囲に基づいて調整
-      if (maxScrollY > 0) {
-        // スクロール可能範囲がある場合、パーセンテージを微調整
-        const scrollRatio = maxScrollY / totalHeight;
-        if (scrollRatio < 0.3) {
-          // スクロール可能範囲が小さい場合、より細かい調整
-          adjustedPercent = Math.max(0, Math.min(100, percent));
-        }
-      }
+      // 0.5%〜99.5%の範囲では、そのまま使用（より細かくスクロールできるようにする）
+      adjustedPercent = Math.max(0, Math.min(100, percent));
     }
     
     // スクロール位置を計算（より正確な計算）
@@ -3376,13 +3618,49 @@ class GhostInterface {
       scrollY = Math.round(scrollY);
     }
     
+    const beforeScrollTop = gScrollContent.scrollTop;
     console.log('スクロール位置調整:', {
-      percent, adjustedPercent, totalItems, scrollViewHeight, totalHeight, maxScrollY, scrollY,
-      actualItemsCount: items.length
+      percent: percent.toFixed(2) + '%',
+      adjustedPercent: adjustedPercent.toFixed(2) + '%',
+      totalItems,
+      scrollViewHeight,
+      totalHeight,
+      maxScrollY: maxScrollY.toFixed(0),
+      scrollY: scrollY.toFixed(0),
+      actualItemsCount: items.length,
+      beforeScrollTop: beforeScrollTop.toFixed(0),
+      scrollHeight: gScrollContent.scrollHeight.toFixed(0),
+      clientHeight: gScrollContent.clientHeight.toFixed(0),
+      canScroll: maxScrollY > 0
     });
     
     // スクロール位置を設定
     gScrollContent.scrollTop = scrollY;
+    
+    // スクロール位置が実際に設定されたか確認
+    const actualScrollTop = gScrollContent.scrollTop;
+    if (Math.abs(actualScrollTop - scrollY) > 1) {
+      console.warn('⚠️ スクロール位置が正しく設定されませんでした:', {
+        expected: scrollY,
+        actual: actualScrollTop,
+        diff: Math.abs(actualScrollTop - scrollY)
+      });
+      // 強制的に再設定を試みる
+      requestAnimationFrame(() => {
+        gScrollContent.scrollTop = scrollY;
+        console.log('🔄 スクロール位置を再設定:', {
+          before: gScrollContent.scrollTop,
+          after: scrollY,
+          actual: gScrollContent.scrollTop
+        });
+      });
+    } else {
+      console.log('✅ スクロール位置が正しく設定されました:', {
+        before: beforeScrollTop,
+        after: actualScrollTop,
+        expected: scrollY
+      });
+    }
     
     // スクロール位置を追跡
     this.lastScrollPercent = percent;
@@ -3426,13 +3704,58 @@ class GhostInterface {
     this.adjustScrollPosition(this.currentPercent, totalItems);
   }
 
-  showGScrollView(percent = 0, type = 'bookmarks') {
+  async showGScrollView(percent = 0, type = 'bookmarks') {
     console.log('showGScrollView呼び出し, percent:', percent, 'type:', type);
     
     if (!this.gScrollView) {
       console.log('gScrollViewが存在しません');
       return;
     }
+    
+    // ダークモード状態と色情報をログ出力
+    const isDark = await new Promise((resolve) => {
+      chrome.storage.sync.get(['darkMode'], (result) => {
+        resolve(result.darkMode === true || document.documentElement.getAttribute('data-theme') === 'dark');
+      });
+    });
+    
+    const rootStyle = getComputedStyle(document.documentElement);
+    const scrollViewStyle = this.gScrollView ? getComputedStyle(this.gScrollView) : null;
+    const headerElement = this.gScrollView?.querySelector('.g-scroll-header');
+    const headerStyle = headerElement ? getComputedStyle(headerElement) : null;
+    const firstItem = this.gScrollView?.querySelector('.bookmark-item, .history-item, .recently-closed-item, .favorite-item');
+    const firstItemStyle = firstItem ? getComputedStyle(firstItem) : null;
+    const firstTitle = firstItem?.querySelector('.bookmark-title, .history-title, .recently-closed-title, .favorite-title');
+    const firstTitleStyle = firstTitle ? getComputedStyle(firstTitle) : null;
+    
+    console.log('🎨 [COLOR] showGScrollView - 色情報:', {
+      isDark: isDark,
+      dataTheme: document.documentElement.getAttribute('data-theme'),
+      cssVariables: {
+        '--ghost-scroll-foreground': rootStyle.getPropertyValue('--ghost-scroll-foreground').trim() || '未設定',
+        '--ghost-scroll-bg': rootStyle.getPropertyValue('--ghost-scroll-bg').trim() || '未設定',
+        '--ghost-scroll-header-bg': rootStyle.getPropertyValue('--ghost-scroll-header-bg').trim() || '未設定',
+        '--ghost-scroll-item-text': rootStyle.getPropertyValue('--ghost-scroll-item-text').trim() || '未設定',
+      },
+      actualColors: {
+        scrollView: {
+          background: scrollViewStyle?.backgroundColor || 'N/A',
+          color: scrollViewStyle?.color || 'N/A',
+        },
+        header: {
+          background: headerStyle?.backgroundColor || 'N/A',
+          color: headerStyle?.color || 'N/A',
+        },
+        firstItem: {
+          background: firstItemStyle?.backgroundColor || 'N/A',
+          color: firstItemStyle?.color || 'N/A',
+        },
+        firstTitle: {
+          color: firstTitleStyle?.color || 'N/A',
+          fontWeight: firstTitleStyle?.fontWeight || 'N/A',
+        },
+      }
+    });
     
     // 表示状態を更新
     this.isVisible = true;
@@ -3530,6 +3853,15 @@ class GhostInterface {
     
     // 外側クリックで閉じる機能を追加
     this.addOutsideClickHandler();
+    
+    // スクロールビューが表示された時に、ポップアップの位置を更新
+    // ゴーストエリア内にいる場合のみ更新
+    if (this.isInGhostArea && this.ghostInterface && this.positionPopup) {
+      const rect = this.ghostInterface.getBoundingClientRect();
+      // 現在のマウス位置を使用（保存されている値）
+      const mouseX = this.currentMouseX || (rect.left + rect.width / 2);
+      this.updatePositionPopup(mouseX, rect);
+    }
     
     console.log('Gスクロールビュー表示完了, type:', type);
   }
@@ -3801,6 +4133,21 @@ class GhostInterface {
     chrome.storage.onChanged.addListener((changes, areaName) => {
       if (areaName !== 'sync') return;
 
+      if (changes.darkMode) {
+        const isDark = changes.darkMode.newValue === true;
+        this.applyTheme(isDark);
+        console.log('ストレージ変更: darkMode を更新:', isDark);
+      }
+
+      if (changes.autoOpenOnHover) {
+        this.autoOpenOnHover = changes.autoOpenOnHover.newValue === true;
+        console.log('ストレージ変更: autoOpenOnHover を更新:', this.autoOpenOnHover);
+        // モードが無効になった場合は固定タイプをリセット
+        if (!this.autoOpenOnHover) {
+          this.fixedDisplayType = null;
+        }
+      }
+
       if (changes.keyLists) {
         this.keyLists = changes.keyLists.newValue || {};
         console.log('ストレージ変更: keyLists を更新');
@@ -3890,7 +4237,7 @@ class GhostInterface {
 
       const existing = this.collections[key];
       if (existing && existing.tabs && existing.tabs.length > 0) {
-        const overwrite = window.confirm(this.getLocalizedText('confirm_overwrite_collection', [key]));
+        const overwrite = await this.showConfirmDialog(this.getLocalizedText('confirm_overwrite_collection', [key]));
         if (!overwrite) {
           this.showNotification(this.getLocalizedText('notification_overwrite_cancelled'), 'info', { duration: 2000 });
           return;
@@ -4145,14 +4492,14 @@ class GhostInterface {
   }
 
   // コレクションのタブを削除
-  removeTabFromCollection(key, index) {
+  async removeTabFromCollection(key, index) {
     const collection = this.collections[key];
     if (!collection) return;
 
     const target = collection.tabs[index];
     if (!target) return;
 
-    const confirmed = window.confirm(
+    const confirmed = await this.showConfirmDialog(
       this.getLocalizedText('confirm_remove_tab_from_collection', [target.title || target.url])
     );
     if (!confirmed) {
@@ -4205,14 +4552,14 @@ class GhostInterface {
   }
 
   // コレクションをJSONとしてエクスポート
-  exportCollectionAsJson(key) {
+  async exportCollectionAsJson(key) {
     const collection = this.collections[key];
     if (!collection) {
       this.showNotification(this.getLocalizedText('notification_export_target_missing'), 'warning');
       return;
     }
 
-    const confirmed = window.confirm(
+    const confirmed = await this.showConfirmDialog(
       this.getLocalizedText('confirm_export_collection', [collection.name])
     );
     if (!confirmed) return;
@@ -4265,14 +4612,14 @@ class GhostInterface {
   }
 
   // ページリストを開く前に確認
-  confirmAndOpenPages(key) {
+  async confirmAndOpenPages(key) {
     const keyList = this.getKeyList(key);
     if (!keyList || keyList.length === 0) {
       this.showNotification(this.getLocalizedText('notification_no_saved_pages_for_key', [key]), 'warning');
       return;
     }
 
-    const confirmed = window.confirm(
+    const confirmed = await this.showConfirmDialog(
       this.getLocalizedText('confirm_open_key_items', [key, keyList.length])
     );
     if (!confirmed) {
@@ -4283,7 +4630,7 @@ class GhostInterface {
     this.openAllPagesInKeyList(key);
   }
 
-  confirmAndRestoreCollection(key) {
+  async confirmAndRestoreCollection(key) {
     const collection = this.collections[key];
     if (!collection || !collection.tabs || collection.tabs.length === 0) {
       this.showNotification(this.getLocalizedText('notification_collection_not_found', [key]), 'warning');
@@ -4304,21 +4651,196 @@ class GhostInterface {
     this.showRestoreOptionsDialog(collection, key);
   }
 
-  showRestoreOptionsDialog(collection, key) {
+  async showConfirmDialog(message) {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get(['darkMode'], async (result) => {
+        const isDark = result.darkMode === true || document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        console.log('🎨 [COLOR] showConfirmDialog - 色情報:', {
+          isDark: isDark,
+          dataTheme: document.documentElement.getAttribute('data-theme'),
+          storageDarkMode: result.darkMode,
+          message: message.substring(0, 50) + '...',
+        });
+
+        const dialog = document.createElement('div');
+        dialog.className = 'ghost-confirm-dialog';
+        if (isDark) {
+          dialog.setAttribute('data-theme', 'dark');
+        }
+        dialog.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: ${isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)'};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000000;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        `;
+
+        const dialogContent = document.createElement('div');
+        dialogContent.style.cssText = `
+          background: ${isDark ? '#1a1a1a' : 'white'};
+          padding: 24px;
+          border-radius: 8px;
+          max-width: 400px;
+          width: 90%;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          border: ${isDark ? '1px solid #374151' : 'none'};
+        `;
+
+        const prompt = document.createElement('div');
+        prompt.textContent = message;
+        prompt.style.cssText = `
+          margin-bottom: 20px;
+          white-space: pre-line;
+          line-height: 1.5;
+          color: ${isDark ? '#cbd5e1' : '#333'};
+          font-weight: 400;
+          font-size: 14px;
+        `;
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.cssText = `
+          display: flex;
+          gap: 8px;
+          justify-content: flex-end;
+        `;
+
+        const createButton = (text, value) => {
+          const button = document.createElement('button');
+          button.textContent = text;
+          button.style.cssText = `
+            padding: 8px 16px;
+            border: 1px solid ${isDark ? '#374151' : '#ccc'};
+            border-radius: 4px;
+            background: ${isDark ? '#0f172a' : 'white'};
+            color: ${isDark ? '#cbd5e1' : '#333'};
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            transition: background 0.2s;
+            min-width: 80px;
+          `;
+          button.addEventListener('mouseenter', () => {
+            button.style.background = isDark ? '#374151' : '#f5f5f5';
+          });
+          button.addEventListener('mouseleave', () => {
+            button.style.background = isDark ? '#0f172a' : 'white';
+          });
+          button.addEventListener('click', () => {
+            document.body.removeChild(dialog);
+            resolve(value);
+          });
+          return button;
+        };
+
+        const okText = this.getLocalizedText('common_ok') || 'OK';
+        const cancelText = this.getLocalizedText('common_cancel') || 'キャンセル';
+        const cancelButton = createButton(cancelText, false);
+        const okButton = createButton(okText, true);
+
+        buttonContainer.appendChild(cancelButton);
+        buttonContainer.appendChild(okButton);
+
+        dialogContent.appendChild(prompt);
+        dialogContent.appendChild(buttonContainer);
+        dialog.appendChild(dialogContent);
+        document.body.appendChild(dialog);
+        
+        // ダイアログ表示後の実際の色をログ出力
+        requestAnimationFrame(() => {
+          const dialogStyle = getComputedStyle(dialogContent);
+          const promptStyle = getComputedStyle(prompt);
+          const okButton = buttonContainer.querySelector('button:last-child');
+          const cancelButton = buttonContainer.querySelector('button:first-child');
+          const okButtonStyle = okButton ? getComputedStyle(okButton) : null;
+          const cancelButtonStyle = cancelButton ? getComputedStyle(cancelButton) : null;
+          
+          console.log('🎨 [COLOR] showConfirmDialog - 実際の色情報:', {
+            isDark: isDark,
+            actualColors: {
+              dialogContent: {
+                background: dialogStyle.backgroundColor,
+                color: dialogStyle.color,
+              },
+              prompt: {
+                color: promptStyle.color,
+                fontWeight: promptStyle.fontWeight,
+              },
+              okButton: {
+                background: okButtonStyle?.backgroundColor || 'N/A',
+                color: okButtonStyle?.color || 'N/A',
+                borderColor: okButtonStyle?.borderColor || 'N/A',
+              },
+              cancelButton: {
+                background: cancelButtonStyle?.backgroundColor || 'N/A',
+                color: cancelButtonStyle?.color || 'N/A',
+                borderColor: cancelButtonStyle?.borderColor || 'N/A',
+              },
+            }
+          });
+        });
+
+        // 背景クリックで閉じる（キャンセル）
+        dialog.addEventListener('click', (e) => {
+          if (e.target === dialog) {
+            document.body.removeChild(dialog);
+            resolve(false);
+          }
+        });
+      });
+    });
+  }
+
+  async showRestoreOptionsDialog(collection, key) {
     const promptText = this.getLocalizedText('restore_collection_prompt', [collection.name, collection.tabs.length]);
     const option1 = this.getLocalizedText('restore_option_existing_window');
     const option2 = this.getLocalizedText('restore_option_new_window');
     const option3 = this.getLocalizedText('restore_option_cancel');
 
+    // ダークモード設定を取得（document.documentElementのdata-theme属性も確認）
+    const isDark = await new Promise((resolve) => {
+      chrome.storage.sync.get(['darkMode'], (result) => {
+        const storageDark = result.darkMode === true;
+        const htmlDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        resolve(storageDark || htmlDark);
+      });
+    });
+    
+    console.log('🎨 [COLOR] showRestoreOptionsDialog - 色情報:', {
+      isDark: isDark,
+      dataTheme: document.documentElement.getAttribute('data-theme'),
+      storageDarkMode: await new Promise((resolve) => {
+        chrome.storage.sync.get(['darkMode'], (result) => resolve(result.darkMode));
+      }),
+      collectionName: collection.name,
+      tabCount: collection.tabs.length,
+      dialogColors: {
+        background: isDark ? '#1a1a1a' : 'white',
+        text: isDark ? '#cbd5e1' : '#333',
+        buttonBg: isDark ? '#0f172a' : 'white',
+        buttonText: isDark ? '#cbd5e1' : '#333',
+      }
+    });
+
     // カスタムダイアログを作成
     const dialog = document.createElement('div');
+    dialog.className = 'ghost-confirm-dialog';
+    if (isDark) {
+      dialog.setAttribute('data-theme', 'dark');
+    }
     dialog.style.cssText = `
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: ${isDark ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.5)'};
       display: flex;
       align-items: center;
       justify-content: center;
@@ -4328,12 +4850,13 @@ class GhostInterface {
 
     const dialogContent = document.createElement('div');
     dialogContent.style.cssText = `
-      background: white;
+      background: ${isDark ? '#1a1a1a' : 'white'};
       padding: 24px;
       border-radius: 8px;
       max-width: 400px;
       width: 90%;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border: ${isDark ? '1px solid #374151' : 'none'};
     `;
 
     const prompt = document.createElement('div');
@@ -4342,7 +4865,9 @@ class GhostInterface {
       margin-bottom: 20px;
       white-space: pre-line;
       line-height: 1.5;
-      color: #333;
+      color: ${isDark ? '#cbd5e1' : '#333'};
+      font-weight: 400;
+      font-size: 14px;
     `;
 
     const buttonContainer = document.createElement('div');
@@ -4357,19 +4882,20 @@ class GhostInterface {
       button.textContent = text;
       button.style.cssText = `
         padding: 10px 16px;
-        border: 1px solid #ccc;
+        border: 1px solid ${isDark ? '#374151' : '#ccc'};
         border-radius: 4px;
-        background: white;
-        color: #333;
+        background: ${isDark ? '#0f172a' : 'white'};
+        color: ${isDark ? '#cbd5e1' : '#333'};
         cursor: pointer;
         font-size: 14px;
+        font-weight: 400;
         transition: background 0.2s;
       `;
       button.addEventListener('mouseenter', () => {
-        button.style.background = '#f5f5f5';
+        button.style.background = isDark ? '#374151' : '#f5f5f5';
       });
       button.addEventListener('mouseleave', () => {
-        button.style.background = 'white';
+        button.style.background = isDark ? '#0f172a' : 'white';
       });
       button.addEventListener('click', () => {
         document.body.removeChild(dialog);

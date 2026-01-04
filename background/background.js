@@ -1,17 +1,17 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'getHistory') {
-    const maxResults = request.maxResults || 300;
+    const maxResults = request.maxResults || 1000;
     console.log('履歴取得要求:', maxResults, '件');
     
+    // startTimeを指定しないことで、全履歴（拡張機能インストール前も含む）を取得
     chrome.history.search(
       {
-      text: '',
-        maxResults,
-        startTime: Date.now() - 3 * 24 * 60 * 60 * 1000
+        text: '',
+        maxResults
       },
       (historyItems) => {
-      console.log('履歴取得完了:', historyItems.length, '件');
-      sendResponse(historyItems);
+        console.log('履歴取得完了:', historyItems.length, '件');
+        sendResponse(historyItems);
       }
     );
 

@@ -205,5 +205,74 @@
   },
   "common_close": {
     "message": "Schließen"
+  },
+  "manager_dark_mode": {
+    "message": "Dunkler Modus"
+  },
+  "manager_dark_mode_on": {
+    "message": "EIN"
+  },
+  "manager_dark_mode_off": {
+    "message": "AUS"
+  },
+  "manager_auto_open_on_hover": {
+    "message": "Automatisch beim Überfahren öffnen"
+  },
+  "manager_auto_open_on_hover_on": {
+    "message": "EIN"
+  },
+  "manager_auto_open_on_hover_off": {
+    "message": "AUS"
+  },
+  "options_settings": {
+    "message": "Einstellungen"
+  },
+  "options_gui_position": {
+    "message": "GUI-Position:"
+  },
+  "options_top_right": {
+    "message": "Oben rechts"
+  },
+  "options_top_left": {
+    "message": "Oben links"
+  },
+  "options_dark_mode": {
+    "message": "Dunkler Modus:"
+  },
+  "options_dark_mode_on": {
+    "message": "EIN"
+  },
+  "options_dark_mode_off": {
+    "message": "AUS"
+  },
+  "options_save": {
+    "message": "Speichern"
+  },
+  "options_settings_saved": {
+    "message": "Einstellungen gespeichert."
+  },
+  "options_legal_load_failed": {
+    "message": "Fehler beim Laden der Nutzungsbedingungen und Datenschutzrichtlinie."
+  },
+  "terms_privacy": {
+    "message": "Nutzungsbedingungen und Datenschutzrichtlinie"
+  },
+  "popupDarkMode": {
+    "message": "Dunkler Modus:"
+  },
+  "popupDarkModeOn": {
+    "message": "EIN"
+  },
+  "popupDarkModeOff": {
+    "message": "AUS"
+  },
+  "popupAutoOpenOnHover": {
+    "message": "Automatisch beim Überfahren öffnen:"
+  },
+  "popupAutoOpenOnHoverOn": {
+    "message": "EIN"
+  },
+  "popupAutoOpenOnHoverOff": {
+    "message": "AUS"
   }
 }

@@ -3,6 +3,9 @@ const OPTIONS_I18N_FALLBACK = {
   options_gui_position: 'GUI position:',
   options_top_right: 'Top right',
   options_top_left: 'Top left',
+  options_dark_mode: 'Dark mode:',
+  options_dark_mode_on: 'ON',
+  options_dark_mode_off: 'OFF',
   options_save: 'Save',
   options_settings_saved: 'Settings saved.',
   options_legal_load_failed: 'Failed to load the terms and privacy policy.',
@@ -54,6 +57,11 @@ function applyLocalization() {
   if (rightOption) rightOption.textContent = t('options_top_right');
   if (leftOption) leftOption.textContent = t('options_top_left');
   
+  const darkModeLabel = document.getElementById('options-dark-mode-label');
+  if (darkModeLabel) {
+    darkModeLabel.textContent = t('options_dark_mode');
+  }
+  
   const saveBtn = document.getElementById('save');
   if (saveBtn) {
     saveBtn.textContent = t('options_save');
@@ -65,8 +73,36 @@ function applyLocalization() {
   }
 }
 
+function applyTheme(isDark) {
+  if (isDark) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
+function loadTheme() {
+  chrome.storage.sync.get(['darkMode'], (result) => {
+    const isDark = result.darkMode === true;
+    applyTheme(isDark);
+    const darkModeToggle = document.getElementById('darkMode');
+    if (darkModeToggle) {
+      darkModeToggle.checked = isDark;
+    }
+    updateToggleText(isDark);
+  });
+}
+
+function updateToggleText(isDark) {
+  const toggleText = document.getElementById('toggle-text');
+  if (toggleText) {
+    toggleText.textContent = isDark ? t('options_dark_mode_on') : t('options_dark_mode_off');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   applyLocalization();
+  loadTheme();
   
   chrome.storage.sync.get(['position'], (result) => {
     const select = document.getElementById('position');
@@ -75,22 +111,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
+  const darkModeToggle = document.getElementById('darkMode');
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener('change', (e) => {
+      const isDark = e.target.checked;
+      applyTheme(isDark);
+      updateToggleText(isDark);
+      // 即座に保存（保存ボタンを押さなくても反映）
+      chrome.storage.sync.set({ darkMode: isDark });
+    });
+  }
+  
   const saveBtn = document.getElementById('save');
   if (saveBtn) {
     saveBtn.addEventListener('click', () => {
       const select = document.getElementById('position');
       const position = select ? select.value : 'right';
+      const darkModeToggle = document.getElementById('darkMode');
+      const darkMode = darkModeToggle ? darkModeToggle.checked : false;
     
-      chrome.storage.sync.set({ position }, () => {
-      const status = document.getElementById('status');
+      chrome.storage.sync.set({ position, darkMode }, () => {
+        const status = document.getElementById('status');
         if (status) {
           status.textContent = t('options_settings_saved');
-      status.className = 'success';
+          status.className = 'success';
       
-      setTimeout(() => {
-        status.textContent = '';
-        status.className = '';
-      }, 2000);
+          setTimeout(() => {
+            status.textContent = '';
+            status.className = '';
+          }, 2000);
         }
       });
     });

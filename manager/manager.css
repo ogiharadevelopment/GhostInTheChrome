@@ -10,7 +10,91 @@
   --ghost-muted: #6b7280;
   --ghost-radius: 12px;
   --ghost-transition: 0.2s ease;
+  --ghost-header-bg: #ffffff;
+  --ghost-card-bg: #ffffff;
+  --ghost-control-bg: #ffffff;
+  --ghost-tab-bg: #eef2ff;
+  --ghost-tab-active-bg: #ffffff;
+  --ghost-tab-text: #3730a3;
+  --ghost-tab-active-text: #111827;
+  --ghost-tag-bg: #e0e7ff;
+  --ghost-tag-text: #3730a3;
+  --ghost-tag-active-bg: #4338ca;
+  --ghost-tag-active-text: #ffffff;
+  --ghost-input-bg: transparent;
+  --ghost-input-hover-bg: #f8fafc;
+  --ghost-input-focus-bg: #eef2ff;
+  --ghost-empty-bg: #f8fafc;
+  --ghost-empty-border: var(--ghost-border);
+  --ghost-btn-ghost-bg: #f1f5f9;
+  --ghost-btn-ghost-hover-bg: #e2e8f0;
   font-family: 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+}
+
+/* ダークモード */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --ghost-primary: #3b82f6;
+  --ghost-primary-hover: #2563eb;
+  --ghost-danger: #ef4444;
+  --ghost-danger-hover: #dc2626;
+  --ghost-border: #374151;
+  --ghost-bg: #0f172a;
+  --ghost-text: #cbd5e1;
+  --ghost-muted: #94a3b8;
+  --ghost-header-bg: #1a1a1a;
+  --ghost-card-bg: #1a1a1a;
+  --ghost-control-bg: #1a1a1a;
+  --ghost-tab-bg: #1e3a8a;
+  --ghost-tab-active-bg: #1a1a1a;
+  --ghost-tab-text: #93c5fd;
+  --ghost-tab-active-text: #cbd5e1;
+  --ghost-tag-bg: #1e3a8a;
+  --ghost-tag-text: #93c5fd;
+  --ghost-tag-active-bg: #3b82f6;
+  --ghost-tag-active-text: #ffffff;
+  --ghost-input-bg: transparent;
+  --ghost-input-hover-bg: #0f172a;
+  --ghost-input-focus-bg: #1e3a8a;
+  --ghost-empty-bg: #0f172a;
+  --ghost-empty-border: var(--ghost-border);
+  --ghost-btn-ghost-bg: #374151;
+  --ghost-btn-ghost-hover-bg: #4b5563;
+}
+
+/* ダークモード時の文字を細文字で目に優しく */
+[data-theme="dark"] body {
+  font-weight: 400;
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+  font-weight: 500;
+  color: var(--ghost-text);
+}
+
+[data-theme="dark"] .ghost-card__title,
+[data-theme="dark"] .ghost-card__name,
+[data-theme="dark"] .tab-item__title {
+  font-weight: 400;
+  color: var(--ghost-text);
+}
+
+[data-theme="dark"] .ghost-card__meta,
+[data-theme="dark"] .tab-item__url,
+[data-theme="dark"] .ghost-card__timestamp {
+  font-weight: 300;
+  color: var(--ghost-muted);
+}
+
+[data-theme="dark"] .ghost-btn {
+  font-weight: 500;
+}
+
+[data-theme="dark"] .control-panel__group label {
+  font-weight: 500;
+  color: var(--ghost-text);
 }
 
 * {
@@ -29,7 +113,7 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  background: #ffffff;
+  background: var(--ghost-header-bg);
   border-bottom: 1px solid var(--ghost-border);
   position: sticky;
   top: 0;
@@ -52,11 +136,99 @@ body {
   display: flex;
   gap: 12px;
   flex-shrink: 0;
+  align-items: center;
+}
+
+.dark-mode-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 12px;
+  gap: 4px;
+}
+
+.dark-mode-toggle-label {
+  font-size: 11px;
+  color: var(--ghost-muted);
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+
+.auto-open-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 12px;
+  gap: 4px;
+}
+
+.auto-open-toggle-label {
+  font-size: 11px;
+  color: var(--ghost-muted);
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 48px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider {
+  background-color: var(--ghost-primary);
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider::before {
+  transform: translateX(24px);
+}
+
+.toggle-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ghost-text);
+  user-select: none;
+  min-width: 28px;
 }
 
 .list-mode-switch {
   display: inline-flex;
-  background: #eef2ff;
+  background: var(--ghost-tab-bg);
   border: 1px solid var(--ghost-border);
   border-radius: 999px;
   padding: 2px;
@@ -69,12 +241,12 @@ body {
   border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
-  color: #3730a3;
+  color: var(--ghost-tab-text);
   cursor: pointer;
 }
 .ghost-tab--active {
-  background: #ffffff;
-  color: #111827;
+  background: var(--ghost-tab-active-bg);
+  color: var(--ghost-tab-active-text);
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
@@ -84,7 +256,7 @@ body {
 }
 
 .control-panel {
-  background: #ffffff;
+  background: var(--ghost-control-bg);
   border: 1px solid var(--ghost-border);
   border-radius: var(--ghost-radius);
   padding: 20px 24px;
@@ -135,9 +307,9 @@ body {
 .ghost-tag {
   padding: 6px 12px;
   border-radius: 999px;
-  background: #e0e7ff;
+  background: var(--ghost-tag-bg);
   border: none;
-  color: #3730a3;
+  color: var(--ghost-tag-text);
   font-size: 12px;
   cursor: pointer;
   transition: transform var(--ghost-transition), box-shadow var(--ghost-transition);
@@ -149,8 +321,8 @@ body {
 }
 
 .ghost-tag--active {
-  background: #4338ca;
-  color: #ffffff;
+  background: var(--ghost-tag-active-bg);
+  color: var(--ghost-tag-active-text);
   box-shadow: 0 8px 20px rgba(67, 56, 202, 0.35);
 }
 
@@ -199,13 +371,13 @@ body {
   text-align: center;
   font-size: 14px;
   color: var(--ghost-muted);
-  background: #f8fafc;
-  border: 1px dashed var(--ghost-border);
+  background: var(--ghost-empty-bg);
+  border: 1px dashed var(--ghost-empty-border);
   border-radius: var(--ghost-radius);
 }
 
 .ghost-card {
-  background: #ffffff;
+  background: var(--ghost-card-bg);
   border: 1px solid var(--ghost-border);
   border-radius: var(--ghost-radius);
   padding: 16px 18px;
@@ -242,8 +414,8 @@ body {
   font-size: 14px;
   padding: 2px 6px;
   border-radius: 6px;
-  background: #eef2ff;
-  color: #4338ca;
+  background: var(--ghost-tag-bg);
+  color: var(--ghost-tag-text);
 }
 
 .ghost-card__meta {
@@ -317,12 +489,12 @@ body {
 }
 
 .ghost-btn--ghost {
-  background: #f1f5f9;
+  background: var(--ghost-btn-ghost-bg);
   color: var(--ghost-text);
 }
 
 .ghost-btn--ghost:hover {
-  background: #e2e8f0;
+  background: var(--ghost-btn-ghost-hover-bg);
 }
 
 .ghost-btn--danger {
@@ -348,7 +520,7 @@ body {
 
 .ghost-card__name-input {
   border: none;
-  background: transparent;
+  background: var(--ghost-input-bg);
   font-size: 15px;
   font-weight: 600;
   color: inherit;
@@ -356,11 +528,11 @@ body {
 }
 
 .ghost-card__name-input:hover {
-  background: #f8fafc;
+  background: var(--ghost-input-hover-bg);
 }
 
 .ghost-card__name-input:focus {
-  background: #eef2ff;
+  background: var(--ghost-input-focus-bg);
 }
 
 .ghost-card__timestamp {
@@ -461,11 +633,12 @@ body {
 
 .toast {
   min-width: 280px;
-  background: #0f172a;
-  color: #ffffff;
+  background: var(--ghost-card-bg);
+  color: var(--ghost-text);
   padding: 12px 16px;
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(15, 23, 42, 0.3);
+  border: 1px solid var(--ghost-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -475,18 +648,26 @@ body {
 
 .toast--success {
   background: #0ea5e9;
+  color: #ffffff;
+  border-color: #0ea5e9;
 }
 
 .toast--warning {
   background: #f97316;
+  color: #ffffff;
+  border-color: #f97316;
 }
 
 .toast--danger {
   background: #fb7185;
+  color: #ffffff;
+  border-color: #fb7185;
 }
 
 .toast--info {
-  background: #0f172a;
+  background: var(--ghost-card-bg);
+  color: var(--ghost-text);
+  border-color: var(--ghost-border);
 }
 
 .toast__message {
@@ -525,6 +706,12 @@ body {
 
   .manager-header__actions {
     width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .dark-mode-toggle-container {
+    width: 100%;
+    margin-bottom: 8px;
   }
 
   .manager-header__actions .ghost-btn {

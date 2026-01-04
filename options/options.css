@@ -1,23 +1,69 @@
 /* Ghost In The Chrome オプション画面のスタイル */
+:root {
+  --options-bg: #f5f5f5;
+  --options-container-bg: #ffffff;
+  --options-text: #333;
+  --options-heading: #2c3e50;
+  --options-group-bg: #fafafa;
+  --options-group-border: #e0e0e0;
+  --options-input-bg: #ffffff;
+  --options-input-border: #ddd;
+  --options-input-focus: #3498db;
+  --options-btn-bg: #3498db;
+  --options-btn-hover: #2980b9;
+  --options-status-success-bg: #d4edda;
+  --options-status-success-text: #155724;
+  --options-status-success-border: #c3e6cb;
+  --options-status-error-bg: #f8d7da;
+  --options-status-error-text: #721c24;
+  --options-status-error-border: #f5c6cb;
+  --options-legal-bg: #fdfdfd;
+  --options-legal-border: #e5e5e5;
+  --options-legal-text: #555;
+}
+
+[data-theme="dark"] {
+  --options-bg: #0f172a;
+  --options-container-bg: #1a1a1a;
+  --options-text: #e5e7eb;
+  --options-heading: #e5e7eb;
+  --options-group-bg: #0f172a;
+  --options-group-border: #374151;
+  --options-input-bg: #0f172a;
+  --options-input-border: #374151;
+  --options-input-focus: #3b82f6;
+  --options-btn-bg: #3b82f6;
+  --options-btn-hover: #2563eb;
+  --options-status-success-bg: #065f46;
+  --options-status-success-text: #d1fae5;
+  --options-status-success-border: #047857;
+  --options-status-error-bg: #7f1d1d;
+  --options-status-error-text: #fee2e2;
+  --options-status-error-border: #991b1b;
+  --options-legal-bg: #0f172a;
+  --options-legal-border: #374151;
+  --options-legal-text: #9ca3af;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 20px;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--options-bg);
+  color: var(--options-text);
 }
 
 .container {
   max-width: 600px;
   margin: 0 auto;
-  background: white;
+  background: var(--options-container-bg);
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  color: #2c3e50;
+  color: var(--options-heading);
   margin-bottom: 30px;
   text-align: center;
   font-size: 24px;
@@ -26,35 +72,40 @@ h1 {
 .setting-group {
   margin-bottom: 25px;
   padding: 15px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--options-group-border);
   border-radius: 5px;
-  background-color: #fafafa;
+  background-color: var(--options-group-bg);
 }
 
 .setting-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--options-heading);
+}
+
+.setting-group #options-dark-mode-label {
+  margin-bottom: 12px;
 }
 
 select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--options-input-border);
   border-radius: 4px;
   font-size: 14px;
-  background-color: white;
+  background-color: var(--options-input-bg);
+  color: var(--options-text);
 }
 
 select:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+  border-color: var(--options-input-focus);
+  box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
 }
 
 button {
-  background-color: #3498db;
+  background-color: var(--options-btn-bg);
   color: white;
   padding: 12px 24px;
   border: none;
@@ -66,11 +117,68 @@ button {
 }
 
 button:hover {
-  background-color: #2980b9;
+  background-color: var(--options-btn-hover);
 }
 
 button:active {
   transform: translateY(1px);
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 0;
+  padding: 4px 0;
+}
+
+.toggle-input {
+  display: none;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 54px;
+  height: 28px;
+  background-color: #ccc;
+  border-radius: 28px;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider {
+  background-color: var(--options-btn-bg);
+}
+
+.toggle-input:checked + .toggle-label .toggle-slider::before {
+  transform: translateX(24px);
+}
+
+.toggle-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--options-text);
+  user-select: none;
+  min-width: 30px;
 }
 
 #status {
@@ -82,15 +190,15 @@ button:active {
 }
 
 #status.success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: var(--options-status-success-bg);
+  color: var(--options-status-success-text);
+  border: 1px solid var(--options-status-success-border);
 }
 
 #status.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background-color: var(--options-status-error-bg);
+  color: var(--options-status-error-text);
+  border: 1px solid var(--options-status-error-border);
 }
 
 .legal-section {
@@ -99,16 +207,16 @@ button:active {
 
 .legal-section h2 {
   margin-bottom: 15px;
-  color: #2c3e50;
+  color: var(--options-heading);
   font-size: 18px;
 }
 
 .legal-content {
-  color: #555;
+  color: var(--options-legal-text);
   font-size: 13px;
   line-height: 1.6;
-  background-color: #fdfdfd;
-  border: 1px solid #e5e5e5;
+  background-color: var(--options-legal-bg);
+  border: 1px solid var(--options-legal-border);
   border-radius: 5px;
   padding: 15px;
   max-height: 300px;
@@ -118,7 +226,7 @@ button:active {
 .legal-content h3 {
   margin-top: 20px;
   margin-bottom: 10px;
-  color: #2c3e50;
+  color: var(--options-heading);
   font-size: 15px;
 }
 

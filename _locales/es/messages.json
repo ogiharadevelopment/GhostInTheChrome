@@ -205,5 +205,74 @@
   },
   "common_close": {
     "message": "Cerrar"
+  },
+  "manager_dark_mode": {
+    "message": "Modo oscuro"
+  },
+  "manager_dark_mode_on": {
+    "message": "ACTIVADO"
+  },
+  "manager_dark_mode_off": {
+    "message": "DESACTIVADO"
+  },
+  "manager_auto_open_on_hover": {
+    "message": "Abrir automáticamente al pasar el mouse"
+  },
+  "manager_auto_open_on_hover_on": {
+    "message": "ACTIVADO"
+  },
+  "manager_auto_open_on_hover_off": {
+    "message": "DESACTIVADO"
+  },
+  "options_settings": {
+    "message": "Configuración"
+  },
+  "options_gui_position": {
+    "message": "Posición de la GUI:"
+  },
+  "options_top_right": {
+    "message": "Arriba a la derecha"
+  },
+  "options_top_left": {
+    "message": "Arriba a la izquierda"
+  },
+  "options_dark_mode": {
+    "message": "Modo oscuro:"
+  },
+  "options_dark_mode_on": {
+    "message": "ACTIVADO"
+  },
+  "options_dark_mode_off": {
+    "message": "DESACTIVADO"
+  },
+  "options_save": {
+    "message": "Guardar"
+  },
+  "options_settings_saved": {
+    "message": "Configuración guardada."
+  },
+  "options_legal_load_failed": {
+    "message": "No se pudo cargar los términos de servicio y la política de privacidad."
+  },
+  "terms_privacy": {
+    "message": "Términos de servicio y política de privacidad"
+  },
+  "popupDarkMode": {
+    "message": "Modo oscuro:"
+  },
+  "popupDarkModeOn": {
+    "message": "ACTIVADO"
+  },
+  "popupDarkModeOff": {
+    "message": "DESACTIVADO"
+  },
+  "popupAutoOpenOnHover": {
+    "message": "Abrir automáticamente al pasar el mouse:"
+  },
+  "popupAutoOpenOnHoverOn": {
+    "message": "ACTIVADO"
+  },
+  "popupAutoOpenOnHoverOff": {
+    "message": "DESACTIVADO"
   }
 }

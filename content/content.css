@@ -1,3 +1,159 @@
+/* CSS変数定義 - ライトモード（デフォルト） */
+:root {
+  --ghost-popup-bg: rgba(0, 0, 0, 0.8);
+  --ghost-popup-text: #ffffff;
+  --ghost-popup-border: rgba(255, 255, 255, 0.2);
+  --ghost-scroll-bg: #ffffff;
+  --ghost-scroll-border: #d1d5db;
+  --ghost-scroll-header-bg: #f3f4f6;
+  --ghost-scroll-foreground: #000000;
+  --ghost-scroll-muted: #374151;
+  --ghost-scroll-hover: #f3f4f6;
+  --ghost-scroll-item-border: #eee;
+  --ghost-scroll-input-bg: #ffffff;
+  --ghost-scroll-input-border: #d1d5db;
+  --ghost-scroll-close-hover: #e5e7eb;
+  --ghost-scroll-filter-clear-hover: #e5e7eb;
+  --ghost-collection-bg: #ffffff;
+  --ghost-collection-border: #e5e7eb;
+  --ghost-collection-text: #000000;
+  --ghost-collection-muted: #374151;
+  --ghost-collection-button-bg: #ffffff;
+  --ghost-collection-button-border: #d0d7de;
+  --ghost-collection-button-hover-bg: #e0f2fe;
+  --ghost-collection-button-hover-border: #3b82f6;
+  --ghost-collection-item-bg: #ffffff;
+  --ghost-collection-item-border: #e5e7eb;
+  --ghost-collection-item-hover-shadow: rgba(15, 23, 42, 0.08);
+  --ghost-collection-actions-bg: #f9fafb;
+  --ghost-collection-actions-border: #d1d5db;
+  --ghost-collection-remove-bg: #fef2f2;
+  --ghost-collection-remove-border: #fecaca;
+  --ghost-collection-remove-text: #991b1b;
+  --ghost-collection-remove-hover-bg: #fee2e2;
+  --ghost-collection-remove-hover-border: #f87171;
+  --ghost-collection-remove-hover-text: #7f1d1d;
+  --ghost-keylist-border: #eee;
+  --ghost-keylist-hover: #f3f4f6;
+  --ghost-keylist-text: #000000;
+  --ghost-keylist-remove-hover: #ffebee;
+}
+
+/* ダークモード */
+[data-theme="dark"] {
+  --ghost-popup-bg: rgba(15, 23, 42, 0.95);
+  --ghost-popup-text: #cbd5e1;
+  --ghost-popup-border: rgba(255, 255, 255, 0.1);
+  --ghost-scroll-bg: #1a1a1a;
+  --ghost-scroll-border: #374151;
+  --ghost-scroll-header-bg: #0f172a;
+  --ghost-scroll-foreground: #cbd5e1;
+  --ghost-scroll-muted: #94a3b8;
+  --ghost-scroll-hover: #374151;
+  --ghost-scroll-item-border: #374151;
+  --ghost-scroll-input-bg: #0f172a;
+  --ghost-scroll-input-border: #374151;
+  --ghost-scroll-close-hover: #374151;
+  --ghost-scroll-filter-clear-hover: #374151;
+  --ghost-collection-bg: #1a1a1a;
+  --ghost-collection-border: #374151;
+  --ghost-collection-text: #cbd5e1;
+  --ghost-collection-muted: #94a3b8;
+  --ghost-collection-button-bg: #0f172a;
+  --ghost-collection-button-border: #374151;
+  --ghost-collection-button-hover-bg: #1e3a8a;
+  --ghost-collection-button-hover-border: #3b82f6;
+  --ghost-collection-item-bg: #0f172a;
+  --ghost-collection-item-border: #374151;
+  --ghost-collection-item-hover-shadow: rgba(59, 130, 246, 0.2);
+  --ghost-collection-actions-bg: #1a1a1a;
+  --ghost-collection-actions-border: #374151;
+  --ghost-collection-remove-bg: #7f1d1d;
+  --ghost-collection-remove-border: #991b1b;
+  --ghost-collection-remove-text: #fee2e2;
+  --ghost-collection-remove-hover-bg: #991b1b;
+  --ghost-collection-remove-hover-border: #dc2626;
+  --ghost-collection-remove-hover-text: #ffffff;
+  --ghost-keylist-border: #374151;
+  --ghost-keylist-hover: #374151;
+  --ghost-keylist-text: #cbd5e1;
+  --ghost-keylist-remove-hover: #7f1d1d;
+}
+
+/* ダークモード時のスクロールビュー内の文字を細文字で目に優しく */
+[data-theme="dark"] .g-scroll-view {
+  font-weight: 400;
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .g-scroll-view * {
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .g-scroll-header {
+  font-weight: 500;
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .g-scroll-title {
+  font-weight: 500;
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .history-title,
+[data-theme="dark"] .bookmark-title,
+[data-theme="dark"] .recently-closed-title,
+[data-theme="dark"] .favorite-title {
+  font-weight: 400 !important;
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .g-scroll-view .bookmark-item,
+[data-theme="dark"] .g-scroll-view .bookmark-item *,
+[data-theme="dark"] .g-scroll-view .bookmark-content,
+[data-theme="dark"] .g-scroll-view .bookmark-content *,
+[data-theme="dark"] .g-scroll-view .bookmark-item * * {
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .g-scroll-view .bookmark-item .bookmark-content .bookmark-title {
+  font-weight: 400 !important;
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .recently-closed-time {
+  font-weight: 300;
+  color: var(--ghost-scroll-muted) !important;
+}
+
+[data-theme="dark"] .g-scroll-filter-label {
+  font-weight: 400;
+  color: var(--ghost-scroll-muted) !important;
+}
+
+[data-theme="dark"] .history-item,
+[data-theme="dark"] .bookmark-item,
+[data-theme="dark"] .recently-closed-item,
+[data-theme="dark"] .favorite-item {
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .bookmark-content {
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+[data-theme="dark"] .bookmark-content * {
+  color: var(--ghost-scroll-foreground) !important;
+}
+
+/* ブックマークアイテム内のすべての要素を強制的に白文字に */
+[data-theme="dark"] .g-scroll-view #bookmark-list .bookmark-item,
+[data-theme="dark"] .g-scroll-view #bookmark-list .bookmark-item *,
+[data-theme="dark"] .g-scroll-view #bookmark-list .bookmark-content,
+[data-theme="dark"] .g-scroll-view #bookmark-list .bookmark-content * {
+  color: var(--ghost-scroll-foreground) !important;
+}
+
 /* ゴーストインターフェース - 完全に透明でユーザー操作を透過 */
 .ghost-interface {
   position: fixed !important;
@@ -75,8 +231,8 @@
 .position-popup {
   position: fixed;
   display: none;
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  background: var(--ghost-popup-bg);
+  color: var(--ghost-popup-text);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 12px;
@@ -120,7 +276,7 @@
 .simple-key-section {
   margin-top: 8px;
   padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid var(--ghost-popup-border);
 }
 
 .simple-key-title {
@@ -180,7 +336,7 @@
   align-items: center;
   margin-bottom: 8px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid var(--ghost-popup-border);
 }
 
 .position-detail-title {
@@ -224,8 +380,8 @@
   height: 600px;
   max-width: calc(100vw - 40px);
   max-height: calc(100vh - 40px);
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: var(--ghost-scroll-bg);
+  border: 1px solid var(--ghost-scroll-border);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 10001;
@@ -233,9 +389,7 @@
   display: none;
   overflow: hidden;
   pointer-events: auto; /* 確実にイベントを受け取る */
-  color: #000000 !important;
-  --ghost-scroll-foreground: #000000;
-  --ghost-scroll-muted: #374151;
+  color: var(--ghost-scroll-foreground) !important;
 }
 
 .g-scroll-view.left {
@@ -245,16 +399,16 @@
 
 /* Gスクロールビューのヘッダー */
 .g-scroll-header {
-  background: #f3f4f6;
+  background: var(--ghost-scroll-header-bg);
   padding: 10px 15px;
-  border-bottom: 1px solid #d1d5db;
+  border-bottom: 1px solid var(--ghost-scroll-border);
   border-radius: 8px 8px 0 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
   font-weight: bold;
   font-size: 14px;
-  color: #000000;
+  color: var(--ghost-scroll-foreground);
 }
 
 .g-scroll-header-top {
@@ -277,7 +431,7 @@
   background: none;
   border: none;
   font-size: 18px;
-  color: #374151;
+  color: var(--ghost-scroll-muted);
   cursor: pointer;
   padding: 0;
   width: 20px;
@@ -290,8 +444,8 @@
 }
 
 .g-scroll-close:hover {
-  background-color: #e5e7eb;
-  color: #000000;
+  background-color: var(--ghost-scroll-close-hover);
+  color: var(--ghost-scroll-foreground);
 }
 
 /* フィルタ入力欄（別行に配置） */
@@ -300,7 +454,7 @@
   flex-direction: column;
   gap: 6px;
   padding-top: 8px;
-  border-top: 1px solid #d1d5db;
+  border-top: 1px solid var(--ghost-scroll-border);
 }
 
 .g-scroll-filter-row {
@@ -312,7 +466,7 @@
 
 .g-scroll-filter-label {
   font-size: 12px;
-  color: #374151;
+  color: var(--ghost-scroll-muted);
   min-width: 50px;
   flex-shrink: 0;
 }
@@ -321,11 +475,11 @@
   flex: 1;
   min-width: 120px;
   padding: 4px 8px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--ghost-scroll-input-border);
   border-radius: 4px;
   font-size: 12px;
-  color: #000000;
-  background: #ffffff;
+  color: var(--ghost-scroll-foreground);
+  background: var(--ghost-scroll-input-bg);
 }
 
 .g-scroll-filter-input:focus {
@@ -338,7 +492,7 @@
   background: none;
   border: none;
   font-size: 16px;
-  color: #6b7280;
+  color: var(--ghost-scroll-muted);
   cursor: pointer;
   padding: 0;
   width: 18px;
@@ -352,8 +506,8 @@
 }
 
 .g-scroll-filter-clear:hover {
-  background-color: #e5e7eb;
-  color: #000000;
+  background-color: var(--ghost-scroll-filter-clear-hover);
+  color: var(--ghost-scroll-foreground);
 }
 
 .g-scroll-content {
@@ -367,7 +521,7 @@
 
 .history-item {
   padding: 4px 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--ghost-scroll-item-border);
   cursor: pointer;
   transition: background-color 0.2s ease;
   min-height: 24px;
@@ -377,7 +531,7 @@
 }
 
 .history-item:hover {
-  background-color: #f3f4f6;
+  background-color: var(--ghost-scroll-hover);
 }
 
 .history-content {
@@ -407,19 +561,19 @@
 
 .bookmark-item {
   padding: 4px 8px !important;
-  border-bottom: 1px solid #eee !important;
+  border-bottom: 1px solid var(--ghost-scroll-item-border) !important;
   cursor: pointer !important;
   transition: background-color 0.2s ease;
   min-height: 24px !important;
   display: flex !important;
   align-items: center !important;
-  color: #000000 !important;
+  color: var(--ghost-scroll-foreground) !important;
   opacity: 1 !important;
   visibility: visible !important;
 }
 
 .bookmark-item:hover {
-  background-color: #f3f4f6;
+  background-color: var(--ghost-scroll-hover);
 }
 
 .bookmark-content {
@@ -430,7 +584,7 @@
   min-width: 0 !important;
   opacity: 1 !important;
   visibility: visible !important;
-  color: #000000 !important;
+  color: var(--ghost-scroll-foreground) !important;
   box-sizing: border-box !important;
 }
 
@@ -455,7 +609,7 @@
 .bookmark-title {
   font-weight: bold !important;
   font-size: 13px !important;
-  color: #000000 !important;
+  color: var(--ghost-scroll-foreground) !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
@@ -475,7 +629,7 @@
 
 /* より詳細度の高いセレクタで確実に表示 */
 .g-scroll-view .bookmark-item .bookmark-content .bookmark-title {
-  color: #000000 !important;
+  color: var(--ghost-scroll-foreground) !important;
   opacity: 1 !important;
   visibility: visible !important;
   display: block !important;
@@ -494,6 +648,12 @@
   box-sizing: border-box !important;
 }
 
+/* ダークモード時のブックマークタイトルのフォントウェイトを上書き */
+[data-theme="dark"] .g-scroll-view .bookmark-item .bookmark-content .bookmark-title {
+  font-weight: 400 !important;
+  color: var(--ghost-scroll-foreground) !important;
+}
+
 .g-scroll-view .bookmark-item .bookmark-content .favorite-button {
   flex-shrink: 0 !important;
   margin-left: auto !important;
@@ -501,14 +661,14 @@
 
 /* 親要素も確実に表示 */
 .g-scroll-view .bookmark-item {
-  color: #000000 !important;
+  color: var(--ghost-scroll-foreground) !important;
   opacity: 1 !important;
   visibility: visible !important;
   display: flex !important;
 }
 
 .g-scroll-view .bookmark-content {
-  color: #000000 !important;
+  color: var(--ghost-scroll-foreground) !important;
   opacity: 1 !important;
   visibility: visible !important;
   display: flex !important;
@@ -516,7 +676,7 @@
 
 .recently-closed-item {
   padding: 4px 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--ghost-scroll-item-border);
   cursor: pointer;
   transition: background-color 0.2s ease;
   min-height: 24px;
@@ -526,7 +686,7 @@
 }
 
 .recently-closed-item:hover {
-  background-color: #f3f4f6;
+  background-color: var(--ghost-scroll-hover);
 }
 
 .recently-closed-content {
@@ -569,7 +729,7 @@
 /* お気に入りアイテムのスタイル追加 */
 .favorite-item {
   padding: 4px 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--ghost-scroll-item-border);
   cursor: pointer;
   transition: background-color 0.2s ease;
   min-height: 24px;
@@ -579,7 +739,7 @@
 }
 
 .favorite-item:hover {
-  background-color: #f3f4f6;
+  background-color: var(--ghost-scroll-hover);
 }
 
 .favorite-content {
@@ -627,13 +787,13 @@
 
 /* キーリスト用のスタイル */
 .keylist-item {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--ghost-keylist-border);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .keylist-item:hover {
-  background-color: #f3f4f6;
+  background-color: var(--ghost-keylist-hover);
 }
 
 .keylist-content {
@@ -651,12 +811,12 @@
 .keylist-title {
   flex: 1;
   font-size: 14px;
-  color: #000000;
+  color: var(--ghost-keylist-text);
   font-weight: 500;
 }
 
 .remove-keylist-button:hover {
-  background-color: #ffebee !important;
+  background-color: var(--ghost-keylist-remove-hover) !important;
   border-radius: 50%;
 } 
 
@@ -670,7 +830,7 @@
 
 .collection-metadata {
   padding: 8px 6px 10px 6px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--ghost-collection-border);
   margin-bottom: 6px;
 }
 
@@ -689,7 +849,7 @@
 .collection-meta-name {
   font-weight: 600;
   font-size: 14px;
-  color: #000000;
+  color: var(--ghost-collection-text);
   margin-bottom: 4px;
 }
 
@@ -698,7 +858,7 @@
   flex-wrap: wrap;
   gap: 8px;
   font-size: 12px;
-  color: #374151;
+  color: var(--ghost-collection-muted);
 }
 
 .collection-meta-actions {
@@ -709,25 +869,25 @@
 .collection-meta-actions button {
   padding: 4px 8px;
   font-size: 12px;
-  border: 1px solid #d0d7de;
+  border: 1px solid var(--ghost-collection-button-border);
   border-radius: 4px;
-  background: #ffffff;
-  color: #1f2937;
+  background: var(--ghost-collection-button-bg);
+  color: var(--ghost-collection-text);
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
 }
 
 .collection-meta-actions button:hover {
-  background: #e0f2fe;
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: var(--ghost-collection-button-hover-bg);
+  border-color: var(--ghost-collection-button-hover-border);
+  color: var(--ghost-collection-text);
 }
 
 .collection-meta-note {
   margin-top: 8px;
   font-size: 12px;
-  color: #1f2937;
+  color: var(--ghost-collection-text);
   line-height: 1.5;
   white-space: pre-wrap;
 }
@@ -740,15 +900,15 @@
 
 .collection-item {
   padding: 6px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--ghost-collection-item-border);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--ghost-collection-item-bg);
   transition: box-shadow 0.2s ease;
-  color: #000000;
+  color: var(--ghost-collection-text);
 }
 
 .collection-item:hover {
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 10px var(--ghost-collection-item-hover-shadow);
 }
 
 .collection-content {
@@ -780,7 +940,7 @@
 
 .collection-url {
   font-size: 12px;
-  color: #374151;
+  color: var(--ghost-collection-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -795,32 +955,32 @@
 .collection-actions button {
   padding: 2px 6px;
   font-size: 11px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--ghost-collection-actions-border);
   border-radius: 4px;
-  background: #f9fafb;
-  color: #1f2937;
+  background: var(--ghost-collection-actions-bg);
+  color: var(--ghost-collection-text);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   font-weight: 500;
 }
 
 .collection-actions button:hover {
-  background: #e0f2fe;
-  border-color: #3b82f6;
-  color: #1e40af;
+  background: var(--ghost-collection-button-hover-bg);
+  border-color: var(--ghost-collection-button-hover-border);
+  color: var(--ghost-collection-text);
 }
 
 .collection-actions .collection-remove {
-  border-color: #fecaca;
-  background: #fef2f2;
-  color: #991b1b;
+  border-color: var(--ghost-collection-remove-border);
+  background: var(--ghost-collection-remove-bg);
+  color: var(--ghost-collection-remove-text);
   font-weight: 600;
 }
 
 .collection-actions .collection-remove:hover {
-  background: #fee2e2;
-  border-color: #f87171;
-  color: #7f1d1d;
+  background: var(--ghost-collection-remove-hover-bg);
+  border-color: var(--ghost-collection-remove-hover-border);
+  color: var(--ghost-collection-remove-hover-text);
 }
 
 /* 汎用通知 */

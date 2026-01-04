@@ -205,5 +205,74 @@
   },
   "common_close": {
     "message": "关闭"
+  },
+  "manager_dark_mode": {
+    "message": "深色模式"
+  },
+  "manager_dark_mode_on": {
+    "message": "开启"
+  },
+  "manager_dark_mode_off": {
+    "message": "关闭"
+  },
+  "manager_auto_open_on_hover": {
+    "message": "悬停时自动打开"
+  },
+  "manager_auto_open_on_hover_on": {
+    "message": "开启"
+  },
+  "manager_auto_open_on_hover_off": {
+    "message": "关闭"
+  },
+  "options_settings": {
+    "message": "设置"
+  },
+  "options_gui_position": {
+    "message": "GUI位置:"
+  },
+  "options_top_right": {
+    "message": "右上"
+  },
+  "options_top_left": {
+    "message": "左上"
+  },
+  "options_dark_mode": {
+    "message": "深色模式:"
+  },
+  "options_dark_mode_on": {
+    "message": "开启"
+  },
+  "options_dark_mode_off": {
+    "message": "关闭"
+  },
+  "options_save": {
+    "message": "保存"
+  },
+  "options_settings_saved": {
+    "message": "设置已保存。"
+  },
+  "options_legal_load_failed": {
+    "message": "无法加载服务条款和隐私政策。"
+  },
+  "terms_privacy": {
+    "message": "服务条款和隐私政策"
+  },
+  "popupDarkMode": {
+    "message": "深色模式:"
+  },
+  "popupDarkModeOn": {
+    "message": "开启"
+  },
+  "popupDarkModeOff": {
+    "message": "关闭"
+  },
+  "popupAutoOpenOnHover": {
+    "message": "悬停时自动打开:"
+  },
+  "popupAutoOpenOnHoverOn": {
+    "message": "开启"
+  },
+  "popupAutoOpenOnHoverOff": {
+    "message": "关闭"
   }
 }

@@ -205,5 +205,74 @@
   },
   "common_close": {
     "message": "Fermer"
+  },
+  "manager_dark_mode": {
+    "message": "Mode sombre"
+  },
+  "manager_dark_mode_on": {
+    "message": "ACTIVÉ"
+  },
+  "manager_dark_mode_off": {
+    "message": "DÉSACTIVÉ"
+  },
+  "manager_auto_open_on_hover": {
+    "message": "Ouverture automatique au survol"
+  },
+  "manager_auto_open_on_hover_on": {
+    "message": "ACTIVÉ"
+  },
+  "manager_auto_open_on_hover_off": {
+    "message": "DÉSACTIVÉ"
+  },
+  "options_settings": {
+    "message": "Paramètres"
+  },
+  "options_gui_position": {
+    "message": "Position de l'interface:"
+  },
+  "options_top_right": {
+    "message": "En haut à droite"
+  },
+  "options_top_left": {
+    "message": "En haut à gauche"
+  },
+  "options_dark_mode": {
+    "message": "Mode sombre:"
+  },
+  "options_dark_mode_on": {
+    "message": "ACTIVÉ"
+  },
+  "options_dark_mode_off": {
+    "message": "DÉSACTIVÉ"
+  },
+  "options_save": {
+    "message": "Enregistrer"
+  },
+  "options_settings_saved": {
+    "message": "Paramètres enregistrés."
+  },
+  "options_legal_load_failed": {
+    "message": "Échec du chargement des conditions d'utilisation et de la politique de confidentialité."
+  },
+  "terms_privacy": {
+    "message": "Conditions d'utilisation et politique de confidentialité"
+  },
+  "popupDarkMode": {
+    "message": "Mode sombre:"
+  },
+  "popupDarkModeOn": {
+    "message": "ACTIVÉ"
+  },
+  "popupDarkModeOff": {
+    "message": "DÉSACTIVÉ"
+  },
+  "popupAutoOpenOnHover": {
+    "message": "Ouverture automatique au survol:"
+  },
+  "popupAutoOpenOnHoverOn": {
+    "message": "ACTIVÉ"
+  },
+  "popupAutoOpenOnHoverOff": {
+    "message": "DÉSACTIVÉ"
   }
 }
